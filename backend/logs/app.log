@@ -1,0 +1,24 @@
+2026-03-12 00:12:20 | DEBUG | Using proactor: IocpProactor
+2026-03-12 00:12:34 | DEBUG | Primary search returned 1 results (marker_type=highlight)
+2026-03-12 00:12:34 | DEBUG | After fallback merge: 30 results
+2026-03-12 00:12:34 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 00:14:06 | DEBUG | Primary search returned 30 results (marker_type=None)
+2026-03-12 00:14:06 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 00:14:10 | INFO | Chat response: query='What is attention' highlights=5 scores=[45, 42, 34, 62, 56]
+2026-03-12 00:14:27 | DEBUG | Using proactor: IocpProactor
+2026-03-12 00:15:32 | DEBUG | Primary search returned 30 results (marker_type=None)
+2026-03-12 00:15:32 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 00:15:36 | INFO | Chat response: query='what is RNN' highlights=5 scores=[41, 57, 26, 50, 48]
+2026-03-12 00:16:00 | DEBUG | Primary search returned 1 results (marker_type=underline)
+2026-03-12 00:16:00 | DEBUG | After fallback merge: 31 results
+2026-03-12 00:16:00 | DEBUG | MMR selected 15/31 candidates (lambda=0.70)
+2026-03-12 00:16:01 | INFO | Chat response: query='내가 밑줄 친 부분이 뭐였더라?' highlights=5 scores=[27, 23, 21, 17, 18]
+2026-03-12 00:16:34 | DEBUG | Primary search returned 1 results (marker_type=circle)
+2026-03-12 00:16:34 | DEBUG | After fallback merge: 31 results
+2026-03-12 00:16:34 | DEBUG | MMR selected 15/31 candidates (lambda=0.70)
+2026-03-12 00:16:36 | INFO | Chat response: query='내가 동그라미 친 부분이 뭐였지? 어떤 단어에 동그라미 쳤었는데..' highlights=5 scores=[17, 13, 12, 8, 7]
+2026-03-12 00:17:05 | DEBUG | Primary search returned 1 results (marker_type=box)
+2026-03-12 00:17:05 | DEBUG | After fallback merge: 31 results
+2026-03-12 00:17:05 | DEBUG | MMR selected 15/31 candidates (lambda=0.70)
+2026-03-12 00:17:07 | INFO | Chat response: query='내가 네모로 표시했던 부분이 뭐였더라' highlights=5 scores=[31, 25, 24, 19, 13]
+2026-03-12 00:18:38 | DEBUG | Using proactor: IocpProactor

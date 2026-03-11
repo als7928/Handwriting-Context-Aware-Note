@@ -1,0 +1,22 @@
+{
+  "name": "handwriting-context-aware-note-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.25",
+    "axios": "^1.7.0",
+    "pdfjs-dist": "^4.7.76",
+    "marked": "^15.0.0",
+    "bootstrap": "^5.3.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.2",
+    "vite": "^7.3.1"
+  }
+}
