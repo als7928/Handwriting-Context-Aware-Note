@@ -1117,3 +1117,5 @@
 2026-03-12 10:19:37 | INFO | Chat response: query='한국어 하라' highlights=5 scores=[30, 26, 26, 26, 26]
 2026-03-12 10:19:55 | INFO | Chat response: query='Show me the part I underlined' highlights=5 scores=[29, 17, 24, 21, 16]
 2026-03-12 10:20:55 | INFO | Chat response: query='트랜스포머 부분에 내가 밑줄 쳤던 문장이 뭐더라?' highlights=5 scores=[40, 46, 32, 31, 36]
+2026-03-12 10:29:08 | INFO | Chat response: query='attention 부분 공부할 때 내가 강조했던 문장이 뭐더라?' highlights=5 scores=[43, 38, 44, 36, 27]
+2026-03-12 10:30:19 | INFO | Chat response: query='Scaled dot-product attention 공부할 때 내가 강조했던 부분이 뭐였지?' highlights=5 scores=[66, 60, 61, 38, 40]
