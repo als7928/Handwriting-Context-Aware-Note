@@ -31,7 +31,7 @@ class RawTextBlock:
 
 @dataclass
 class MarkerAnnotation:
-    """A detected handwritten marker (star, underline, circle, etc.)."""
+    """A detected handwritten marker or annotation found near printed text."""
 
     page_no: int
     marker_type: str
@@ -60,21 +60,6 @@ class SpatialChunk:
 
 # ── Marker heuristics ────────────────────────────────────────────────────────
 
-_MARKER_KEYWORDS: dict[str, list[str]] = {
-    "star": ["star", "asterisk"],
-    "underline": ["underline", "line"],
-    "squiggly": ["squiggly", "wavy"],
-    "strikethrough": ["strikeout", "strikethrough", "strike"],
-    "circle": ["circle", "ellipse", "oval"],
-    "arrow": ["arrow"],
-    "highlight": ["highlight", "rect"],
-    "bracket": ["bracket", "brace"],
-    "checkmark": ["check", "tick"],
-    "box": ["box", "rectangle", "square", "frame"],
-    "free_text": ["free_text", "freetext"],
-    "handwriting": ["handwriting", "handwritten"],
-}
-
 # Annotation types drawn OVER printed text – exact covered text is read
 # directly via page.get_textbox() rather than proximity mapping.
 _TEXT_OVERLAY_TYPES: frozenset[int] = frozenset({
@@ -83,139 +68,6 @@ _TEXT_OVERLAY_TYPES: frozenset[int] = frozenset({
     fitz.PDF_ANNOT_SQUIGGLY,
     fitz.PDF_ANNOT_STRIKE_OUT,
 })
-
-
-def _classify_ink_annotation(annot: fitz.Annot) -> str:
-    """Classify a PDF_ANNOT_INK annotation by the shape of its bounding box
-    and vertex count.  Falls back to 'ink_drawing' when shape is ambiguous.
-    """
-    rect = annot.rect
-    if not rect or rect.is_empty:
-        return "ink_drawing"
-    w = rect.width
-    h = max(rect.height, 0.1)
-    aspect = w / h
-
-    # Count total vertex points across all ink paths
-    n_pts = 0
-    try:
-        verts = annot.vertices or []
-        # ink annotation: verts is a list of paths, each path a list of Points
-        for path in verts:
-            if hasattr(path, "__len__") and not isinstance(path, (fitz.Point,)):
-                n_pts += len(path)
-            else:
-                n_pts += 1
-    except Exception:
-        n_pts = 0
-
-    # Very wide and flat stroke(s) → underline / strikethrough
-    if aspect >= 3.5 and h <= 30:
-        return "underline"
-    if aspect >= 2.5 and h <= 20:
-        return "underline"
-
-    # Roughly square bounding box
-    if 0.35 <= aspect <= 2.8 and w >= 15 and h >= 15:
-        if n_pts >= 12:
-            # Smooth curve with many control points → circle
-            return "circle"
-        if 4 <= n_pts < 12:
-            # Fewer angular points → hand-drawn box
-            return "box"
-        # Unknown vertex count but squarish bbox → assume circle
-        return "circle"
-
-    # Small tick shape → checkmark
-    if w <= 60 and h <= 60 and aspect < 2.0 and n_pts <= 6:
-        return "checkmark"
-
-    return "ink_drawing"
-
-
-def _classify_annotation(annot: fitz.Annot) -> str:
-    """Return a human-readable marker type from a PDF annotation."""
-    info = annot.info
-    content = (info.get("content", "") + info.get("subject", "")).lower()
-    annot_type = annot.type[1].lower() if annot.type else ""
-
-    for marker, keywords in _MARKER_KEYWORDS.items():
-        if any(kw in content or kw in annot_type for kw in keywords):
-            return marker
-
-    # Fallback: classify by annotation type id
-    type_id = annot.type[0] if annot.type else -1
-    if type_id == fitz.PDF_ANNOT_HIGHLIGHT:
-        return "highlight"
-    if type_id == fitz.PDF_ANNOT_UNDERLINE:
-        return "underline"
-    if type_id == fitz.PDF_ANNOT_SQUIGGLY:
-        return "squiggly"
-    if type_id == fitz.PDF_ANNOT_STRIKE_OUT:
-        return "strikethrough"
-    if type_id == fitz.PDF_ANNOT_FREE_TEXT:
-        return "free_text"
-    if type_id == fitz.PDF_ANNOT_INK:
-        # Shape-based classification gives much better results than a flat label
-        return _classify_ink_annotation(annot)
-    if type_id == fitz.PDF_ANNOT_STAMP:
-        return "stamp"
-    return "unknown"
-
-
-def _classify_drawing(drawing: dict) -> str:
-    """Heuristic classification of a vector drawing as a marker type.
-
-    Uses item types, counts, and bounding-box aspect ratio to distinguish
-    underlines, circles, rectangles/boxes, checkmarks and arrows.
-    """
-    items = drawing.get("items", [])
-    if not items:
-        return "unknown"
-
-    # Explicit PDF rectangle primitive → box
-    if any(item[0] == "re" for item in items):
-        return "box"
-
-    line_count = sum(1 for item in items if item[0] == "l")
-    curve_count = sum(1 for item in items if item[0] == "c")
-    has_close = any(item[0] == "h" for item in items)
-
-    # Bounding-box aspect ratio (width / height) for shape disambiguation
-    rect = drawing.get("rect")
-    aspect = 1.0
-    width = height = 0.0
-    if rect is not None:
-        r = fitz.Rect(rect)
-        width = r.width
-        height = max(r.height, 0.1)
-        aspect = width / height
-
-    # Mostly Bezier curves, roughly closed → circle / oval
-    if curve_count >= 3 and curve_count >= line_count:
-        return "circle"
-
-    # Many curves + many lines in a star-burst pattern → star
-    if curve_count >= 4 and line_count >= 4:
-        return "star"
-
-    # Several straight lines forming a closed rectangle → hand-drawn box
-    if line_count >= 3 and curve_count == 0 and (has_close or line_count >= 4):
-        return "box"
-
-    # One or two lines, significantly wider than tall → underline
-    if line_count <= 2 and curve_count == 0 and aspect >= 2.5:
-        return "underline"
-
-    # Two short lines forming a tick / check shape
-    if line_count == 2 and curve_count == 0 and width <= 50 and height <= 50:
-        return "checkmark"
-
-    # Multiple lines, wide bounding box → arrow
-    if line_count >= 3 and curve_count == 0 and aspect >= 2.0:
-        return "arrow"
-
-    return "ink_drawing"
 
 
 # ── Core extraction ──────────────────────────────────────────────────────────
@@ -310,7 +162,7 @@ def extract_markers(page: fitz.Page, page_no: int) -> list[MarkerAnnotation]:
         markers.append(
             MarkerAnnotation(
                 page_no=page_no,
-                marker_type=_classify_annotation(annot),
+                marker_type="annotated",
                 cx=(rect.x0 + rect.x1) / 2,
                 cy=(rect.y0 + rect.y1) / 2,
                 x0=rect.x0, y0=rect.y0, x1=rect.x1, y1=rect.y1,
@@ -324,7 +176,7 @@ def extract_markers(page: fitz.Page, page_no: int) -> list[MarkerAnnotation]:
         markers.append(
             MarkerAnnotation(
                 page_no=page_no,
-                marker_type=_classify_drawing(cluster),
+                marker_type="annotated",
                 cx=(r.x0 + r.x1) / 2,
                 cy=(r.y0 + r.y1) / 2,
                 x0=r.x0, y0=r.y0, x1=r.x1, y1=r.y1,
@@ -371,7 +223,7 @@ def extract_annotated_text_chunks(page: fitz.Page, page_no: int) -> list[Spatial
                 y0=rect.y0,
                 x1=rect.x1,
                 y1=rect.y1,
-                marker_type=_classify_annotation(annot),
+                marker_type="annotated",
                 marker_distance=0.0,
             )
         )
@@ -404,7 +256,7 @@ def extract_freetext_and_ink_chunks(page: fitz.Page, page_no: int) -> list[Spati
                         y0=rect.y0,
                         x1=rect.x1,
                         y1=rect.y1,
-                        marker_type="free_text",
+                        marker_type="annotated",
                         marker_distance=0.0,
                     )
                 )
@@ -422,7 +274,7 @@ def extract_freetext_and_ink_chunks(page: fitz.Page, page_no: int) -> list[Spati
                         y0=rect.y0,
                         x1=rect.x1,
                         y1=rect.y1,
-                        marker_type="ink_drawing",
+                        marker_type="annotated",
                         marker_distance=0.0,
                     )
                 )
@@ -452,12 +304,13 @@ def _try_ocr_chunks(page: fitz.Page, page_no: int) -> list[SpatialChunk]:
                     page_no=page_no,
                     text=text,
                     x0=rect.x0, y0=rect.y0, x1=rect.x1, y1=rect.y1,
-                    marker_type="handwriting",
+                    marker_type="annotated",
                     marker_distance=0.0,
                 )
             )
     else:
-        # Mode 2: OCR only ink annotation regions that have no underlying text
+        # Mode 2: OCR ink annotation regions that have no underlying printed text.
+        # The OCR'd text is the handwritten content itself – store it as annotated.
         for annot in page.annots() or []:
             type_id = annot.type[0] if annot.type else -1
             if type_id != fitz.PDF_ANNOT_INK:
@@ -472,7 +325,7 @@ def _try_ocr_chunks(page: fitz.Page, page_no: int) -> list[SpatialChunk]:
                         page_no=page_no,
                         text=f"[Handwritten] {text}",
                         x0=rect.x0, y0=rect.y0, x1=rect.x1, y1=rect.y1,
-                        marker_type="handwriting",
+                        marker_type="annotated",
                         marker_distance=0.0,
                     )
                 )

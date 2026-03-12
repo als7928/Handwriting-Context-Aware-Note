@@ -30,10 +30,11 @@ async def upload_document(
         raise HTTPException(status_code=400, detail="Only PDF files are accepted.")
 
     # Persist file to disk
-    os.makedirs(settings.upload_dir, exist_ok=True)
+    upload_dir = os.path.abspath(settings.upload_dir)
+    os.makedirs(upload_dir, exist_ok=True)
     file_id = str(uuid.uuid4())
     safe_name = f"{file_id}.pdf"
-    file_path = os.path.join(settings.upload_dir, safe_name)
+    file_path = os.path.join(upload_dir, safe_name)
 
     with open(file_path, "wb") as buf:
         shutil.copyfileobj(file.file, buf)
@@ -141,6 +142,7 @@ async def serve_document_file(
     db: AsyncSession = Depends(get_db),
 ):
     """Serve the raw PDF file for the frontend viewer."""
+    from urllib.parse import quote
     from fastapi.responses import FileResponse
 
     doc = await db.get(Document, document_id)
@@ -149,8 +151,12 @@ async def serve_document_file(
     if not os.path.exists(doc.upload_path):
         raise HTTPException(status_code=404, detail="File not found on disk.")
 
+    # RFC 5987 encoding for non-ASCII (e.g. Korean) filenames in HTTP headers
+    encoded_name = quote(doc.filename, safe="")
+    content_disposition = f"inline; filename*=UTF-8''{encoded_name}"
+
     return FileResponse(
         doc.upload_path,
         media_type="application/pdf",
-        filename=doc.filename,
+        headers={"Content-Disposition": content_disposition},
     )

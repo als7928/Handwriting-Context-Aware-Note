@@ -11,7 +11,7 @@ from api.chat import router as chat_router
 from config import settings
 from api.documents import router as documents_router
 from models.database import Base
-from services.db import engine
+from services.db import engine, ensure_database_exists
 from services.vector_store import ensure_collection
 
 
@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup: create DB tables & Qdrant collection. Shutdown: dispose engine."""
+    await ensure_database_exists()
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     try:
@@ -45,10 +46,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS – allow the Vue.js dev server
+# CORS – allow the Vue.js dev server and Docker/Nginx frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:80",
+        "http://localhost",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

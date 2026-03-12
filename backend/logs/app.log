@@ -22,3 +22,546 @@
 2026-03-12 00:17:05 | DEBUG | MMR selected 15/31 candidates (lambda=0.70)
 2026-03-12 00:17:07 | INFO | Chat response: query='내가 네모로 표시했던 부분이 뭐였더라' highlights=5 scores=[31, 25, 24, 19, 13]
 2026-03-12 00:18:38 | DEBUG | Using proactor: IocpProactor
+2026-03-12 10:34:16 | INFO | Database 'spatial_notes' created successfully.
+2026-03-12 10:34:34 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 10:40:31 | DEBUG | Calling on_part_begin with no data
+2026-03-12 10:40:31 | DEBUG | Calling on_header_field with data[42:61]
+2026-03-12 10:40:31 | DEBUG | Calling on_header_value with data[63:239]
+2026-03-12 10:40:31 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:40:31 | DEBUG | Calling on_header_field with data[241:253]
+2026-03-12 10:40:31 | DEBUG | Calling on_header_value with data[255:270]
+2026-03-12 10:40:31 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:40:31 | DEBUG | Calling on_headers_finished with no data
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[274:255211]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:83963]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:65328]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:208]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:65328]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:65744]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:130500]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:234044]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:65536]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:77824]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_data with data[0:14154]
+2026-03-12 10:40:31 | DEBUG | Calling on_part_end with no data
+2026-03-12 10:40:31 | DEBUG | Calling on_end with no data
+2026-03-12 10:40:31 | INFO | PDF page 1: 1 text blocks | 0 PDF annots | 38 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:31 | INFO | PDF page 2: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:31 | INFO | PDF page 3: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 4: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 5: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 6: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 7: 14 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 8: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 9: 14 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 10: 13 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 11: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 12: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 13: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 14: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 15: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 16: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 17: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 18: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 19: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 20: 7 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 21: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 22: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 23: 10 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 24: 14 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 25: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 26: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 27: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 28: 10 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 29: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 30: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF page 31: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:40:32 | INFO | PDF processing done: 282 total chunks (282 proximity-mapped, 0 direct)
+2026-03-12 10:41:03 | DEBUG | Primary search returned 30 results (marker_type=None)
+2026-03-12 10:41:03 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 10:41:09 | INFO | Chat response: query='회로개발 - 회로설계 직무의 수행업무는?' highlights=5 scores=[37, 35, 30, 29, 43]
+2026-03-12 10:42:58 | DEBUG | Primary search returned 30 results (marker_type=None)
+2026-03-12 10:42:58 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 10:43:01 | INFO | Chat response: query='소프트웨어 개발 시스템 소프트웨어 개발 직무의 수행업무는?' highlights=5 scores=[50, 49, 48, 42, 37]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_begin with no data
+2026-03-12 10:48:14 | DEBUG | Calling on_header_field with data[42:61]
+2026-03-12 10:48:14 | DEBUG | Calling on_header_value with data[63:197]
+2026-03-12 10:48:14 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:48:14 | DEBUG | Calling on_header_field with data[199:211]
+2026-03-12 10:48:14 | DEBUG | Calling on_header_value with data[213:228]
+2026-03-12 10:48:14 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:48:14 | DEBUG | Calling on_headers_finished with no data
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[232:255211]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:255999]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:1]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_data with data[0:9725]
+2026-03-12 10:48:14 | DEBUG | Calling on_part_end with no data
+2026-03-12 10:48:14 | DEBUG | Calling on_end with no data
+2026-03-12 10:48:14 | INFO | PDF page 1: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 2: 5 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 3: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 4: 3 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 5: 12 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 6: 12 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 7: 14 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 8: 8 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 9: 17 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 10: 21 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 11: 20 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 12: 20 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 13: 12 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 14: 14 text blocks | 0 PDF annots | 10 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 15: 7 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 16: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 17: 17 text blocks | 0 PDF annots | 24 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 18: 18 text blocks | 0 PDF annots | 25 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 19: 23 text blocks | 0 PDF annots | 29 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 20: 19 text blocks | 0 PDF annots | 24 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 21: 16 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 22: 18 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 23: 9 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 24: 10 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 25: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 26: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 27: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 28: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 29: 6 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 30: 8 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 31: 9 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 32: 12 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 33: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 34: 7 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 35: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 36: 14 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 37: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 38: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 39: 7 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 40: 12 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 41: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 42: 14 text blocks | 0 PDF annots | 32 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 43: 12 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 44: 7 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 45: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 46: 12 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 47: 8 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 48: 17 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 49: 10 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 50: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 51: 15 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 52: 7 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 53: 14 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 54: 5 text blocks | 0 PDF annots | 9 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 55: 6 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 56: 7 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 57: 7 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 58: 15 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 59: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 60: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 61: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 62: 7 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 63: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 64: 7 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 65: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 66: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 67: 7 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 68: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 69: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 70: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF page 71: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:48:14 | INFO | PDF processing done: 649 total chunks (649 proximity-mapped, 0 direct)
+2026-03-12 10:49:00 | DEBUG | Calling on_part_begin with no data
+2026-03-12 10:49:00 | DEBUG | Calling on_header_field with data[42:61]
+2026-03-12 10:49:00 | DEBUG | Calling on_header_value with data[63:211]
+2026-03-12 10:49:00 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:49:00 | DEBUG | Calling on_header_field with data[213:225]
+2026-03-12 10:49:00 | DEBUG | Calling on_header_value with data[227:242]
+2026-03-12 10:49:00 | DEBUG | Calling on_header_end with no data
+2026-03-12 10:49:00 | DEBUG | Calling on_headers_finished with no data
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[246:147384]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:73728]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:65536]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:131072]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:131072]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:131072]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:256000]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_data with data[0:240472]
+2026-03-12 10:49:00 | DEBUG | Calling on_part_end with no data
+2026-03-12 10:49:00 | DEBUG | Calling on_end with no data
+2026-03-12 10:49:00 | INFO | PDF page 1: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 2: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 3: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 4: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 5: 1 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 6: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 7: 1 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 8: 1 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 9: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 10: 8 text blocks | 0 PDF annots | 6 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 11: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 12: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 13: 1 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:00 | INFO | PDF page 14: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:36 | WARNING | Downloading detection model, please wait. This may take several minutes depending upon your network connection.
+2026-03-12 10:49:41 | INFO | Download complete
+2026-03-12 10:49:41 | WARNING | Downloading recognition model, please wait. This may take several minutes depending upon your network connection.
+2026-03-12 10:49:43 | INFO | Download complete.
+2026-03-12 10:49:45 | INFO | EasyOCR initialised (Korean + English, CPU mode)
+2026-03-12 10:49:45 | INFO | PDF page 15: 2 text blocks | 2 PDF annots | 5 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:46 | INFO | PDF page 16: 1 text blocks | 3 PDF annots | 16 drawings | 4 markers extracted | 1 direct chunks
+2026-03-12 10:49:46 | INFO | PDF page 17: 1 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:46 | INFO | PDF page 18: 6 text blocks | 0 PDF annots | 16 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:46 | INFO | PDF page 19: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 20: 4 text blocks | 2 PDF annots | 7 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 21: 10 text blocks | 3 PDF annots | 8 drawings | 4 markers extracted | 3 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 22: 5 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 23: 12 text blocks | 1 PDF annots | 11 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 24: 4 text blocks | 1 PDF annots | 3 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 25: 3 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 26: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 27: 7 text blocks | 2 PDF annots | 8 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | DEBUG | EasyOCR region error: OpenCV(4.13.0) /Users/xperience/GHA-OpenCV-Python/_work/opencv-python/opencv-python/opencv/modules/imgproc/src/color.cpp:199: error: (-215:Assertion failed) !_src.empty() in function 'cvtColor'
+
+2026-03-12 10:49:47 | INFO | PDF page 28: 8 text blocks | 2 PDF annots | 6 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | DEBUG | EasyOCR region error: OpenCV(4.13.0) /Users/xperience/GHA-OpenCV-Python/_work/opencv-python/opencv-python/opencv/modules/imgproc/src/color.cpp:199: error: (-215:Assertion failed) !_src.empty() in function 'cvtColor'
+
+2026-03-12 10:49:47 | INFO | PDF page 29: 8 text blocks | 2 PDF annots | 6 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 30: 7 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 31: 7 text blocks | 1 PDF annots | 6 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 32: 5 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 33: 6 text blocks | 1 PDF annots | 2 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 34: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 35: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 36: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 37: 1 text blocks | 2 PDF annots | 5 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 38: 3 text blocks | 1 PDF annots | 3 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 39: 5 text blocks | 2 PDF annots | 13 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 40: 1 text blocks | 1 PDF annots | 2 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:47 | INFO | PDF page 41: 10 text blocks | 1 PDF annots | 10 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:48 | INFO | PDF page 42: 10 text blocks | 2 PDF annots | 9 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:48 | INFO | PDF page 43: 11 text blocks | 3 PDF annots | 9 drawings | 4 markers extracted | 1 direct chunks
+2026-03-12 10:49:48 | INFO | PDF page 44: 1 text blocks | 2 PDF annots | 7 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:50 | INFO | PDF page 45: 1 text blocks | 2 PDF annots | 7 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:51 | DEBUG | EasyOCR region error: OpenCV(4.13.0) /Users/xperience/GHA-OpenCV-Python/_work/opencv-python/opencv-python/opencv/modules/imgproc/src/color.cpp:199: error: (-215:Assertion failed) !_src.empty() in function 'cvtColor'
+
+2026-03-12 10:49:51 | INFO | PDF page 46: 10 text blocks | 2 PDF annots | 6 drawings | 3 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 47: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 48: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 49: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 50: 6 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 51: 8 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 52: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 53: 6 text blocks | 1 PDF annots | 6 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 54: 7 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 55: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 56: 11 text blocks | 2 PDF annots | 6 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 57: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 58: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 59: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 60: 3 text blocks | 1 PDF annots | 94 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 61: 7 text blocks | 1 PDF annots | 12 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:51 | INFO | PDF page 62: 15 text blocks | 4 PDF annots | 25 drawings | 5 markers extracted | 3 direct chunks
+2026-03-12 10:49:52 | INFO | PDF page 63: 5 text blocks | 4 PDF annots | 9 drawings | 5 markers extracted | 1 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 64: 7 text blocks | 3 PDF annots | 16 drawings | 4 markers extracted | 3 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 65: 1 text blocks | 1 PDF annots | 140 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 66: 1 text blocks | 0 PDF annots | 183 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 67: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 68: 1 text blocks | 2 PDF annots | 3 drawings | 3 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 69: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 70: 7 text blocks | 1 PDF annots | 25 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 71: 4 text blocks | 1 PDF annots | 3 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 72: 3 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 73: 7 text blocks | 2 PDF annots | 68 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 74: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 75: 4 text blocks | 3 PDF annots | 5 drawings | 4 markers extracted | 0 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 76: 4 text blocks | 1 PDF annots | 10 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 77: 7 text blocks | 1 PDF annots | 12 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:53 | INFO | PDF page 78: 5 text blocks | 2 PDF annots | 5 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 79: 10 text blocks | 3 PDF annots | 38 drawings | 4 markers extracted | 3 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 80: 8 text blocks | 2 PDF annots | 5 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 81: 9 text blocks | 3 PDF annots | 25 drawings | 4 markers extracted | 3 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 82: 10 text blocks | 4 PDF annots | 28 drawings | 5 markers extracted | 4 direct chunks
+2026-03-12 10:49:54 | DEBUG | EasyOCR region error: OpenCV(4.13.0) /Users/xperience/GHA-OpenCV-Python/_work/opencv-python/opencv-python/opencv/modules/imgproc/src/color.cpp:199: error: (-215:Assertion failed) !_src.empty() in function 'cvtColor'
+
+2026-03-12 10:49:54 | INFO | PDF page 83: 1 text blocks | 1 PDF annots | 11 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 84: 1 text blocks | 0 PDF annots | 31 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 85: 1 text blocks | 0 PDF annots | 23 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 86: 1 text blocks | 0 PDF annots | 83 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 87: 2 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:54 | INFO | PDF page 88: 4 text blocks | 2 PDF annots | 6 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 89: 2 text blocks | 2 PDF annots | 3 drawings | 3 markers extracted | 2 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 90: 1 text blocks | 1 PDF annots | 3 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 91: 3 text blocks | 1 PDF annots | 17 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 92: 3 text blocks | 1 PDF annots | 9 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 93: 11 text blocks | 0 PDF annots | 24 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 94: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 95: 5 text blocks | 0 PDF annots | 118 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 96: 7 text blocks | 0 PDF annots | 60 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 97: 2 text blocks | 0 PDF annots | 69 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 98: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 99: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 100: 10 text blocks | 1 PDF annots | 10 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 101: 10 text blocks | 2 PDF annots | 7 drawings | 3 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 102: 5 text blocks | 1 PDF annots | 5 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 103: 7 text blocks | 1 PDF annots | 149 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 104: 7 text blocks | 1 PDF annots | 7 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 105: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 106: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 107: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 108: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 109: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 110: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 111: 2 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 112: 4 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 113: 7 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 114: 3 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 115: 6 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 116: 6 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 117: 5 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 118: 3 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 119: 7 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 120: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 121: 1 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 122: 1 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 123: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 124: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 125: 1 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 126: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 127: 1 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 128: 8 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 129: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 130: 16 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 131: 1 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 132: 4 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 133: 6 text blocks | 0 PDF annots | 4 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 134: 11 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 135: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 136: 5 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 137: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 138: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 139: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 140: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 141: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 142: 1 text blocks | 0 PDF annots | 1 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 143: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 144: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 145: 1 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 146: 1 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 147: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 148: 4 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 149: 1 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 150: 1 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 151: 6 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 152: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 153: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 154: 1 text blocks | 0 PDF annots | 14 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 155: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 156: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 157: 7 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 158: 3 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF page 159: 1 text blocks | 0 PDF annots | 2 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 10:49:55 | INFO | PDF processing done: 700 total chunks (636 proximity-mapped, 64 direct)
+2026-03-12 10:50:29 | DEBUG | Primary search returned 0 results (marker_type=star)
+2026-03-12 10:50:29 | DEBUG | After fallback merge: 30 results
+2026-03-12 10:50:29 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 10:50:31 | INFO | Chat response: query='내가 별표쳤던 단어가 뭐였지?' highlights=5 scores=[35, 26, 23, 29, 29]
+2026-03-12 11:08:25 | DEBUG | Primary search returned 13 results (marker_type=underline)
+2026-03-12 11:08:29 | INFO | Chat response: query='LLM Learder board 부분에 평가범위 관련해서 중요한 부분에 밑줄을 쳤었는데 그게 뭐였지?' highlights=5 scores=[36, 26, 23, 18, 14]
+2026-03-12 11:10:59 | DEBUG | Primary search returned 26 results (marker_type=handwriting)
+2026-03-12 11:10:59 | DEBUG | MMR selected 15/26 candidates (lambda=0.70)
+2026-03-12 11:11:00 | INFO | Chat response: query='Transformer 설명하는 슬라이드에 분산 컴퓨팅 관련해서 필기했던 내용 뭐였지?' highlights=5 scores=[25, 23, 22, 21, 21]
+2026-03-12 11:13:37 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 11:22:21 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 11:22:24 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 11:22:37 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 11:23:03 | DEBUG | Primary search returned 0 results (marker_type=annotated)
+2026-03-12 11:23:04 | DEBUG | After fallback merge: 30 results
+2026-03-12 11:23:04 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 11:23:06 | INFO | Chat response: query='Transformer 설명하는 슬라이드에 분산 컴퓨팅 관련해서 필기했던 내용 뭐였지?' highlights=5 scores=[51, 45, 30, 31, 38]
+2026-03-12 11:25:18 | DEBUG | Primary search returned 0 results (marker_type=annotated)
+2026-03-12 11:25:18 | DEBUG | After fallback merge: 30 results
+2026-03-12 11:25:18 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 11:25:20 | INFO | Chat response: query='LLM Learder board 부분에 평가범위 관련해서 중요한 부분에 밑줄을 쳤었는데 그게 뭐였지?' highlights=5 scores=[47, 45, 43, 37, 35]
+2026-03-12 11:51:19 | DEBUG | Primary search returned 0 results (marker_type=annotated)
+2026-03-12 11:51:19 | DEBUG | After fallback merge: 30 results
+2026-03-12 11:51:19 | DEBUG | MMR selected 15/30 candidates (lambda=0.70)
+2026-03-12 11:51:21 | INFO | Chat response: query='내가 머니게임이라 필기했던게 있던거 같은데 뭐였지?' highlights=5 scores=[26, 24, 22, 49, 33]
+2026-03-12 11:59:57 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 12:00:06 | DEBUG | Database 'spatial_notes' already exists.
+2026-03-12 04:18:16 | INFO | Database 'spatial_notes' created successfully.
+2026-03-12 04:22:32 | INFO | PDF page 1: 4 text blocks | 0 PDF annots | 33 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 2: 23 text blocks | 0 PDF annots | 27 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 3: 21 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 4: 15 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 5: 6 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 6: 13 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 7: 6 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 8: 8 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 9: 15 text blocks | 0 PDF annots | 11 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 10: 10 text blocks | 0 PDF annots | 11 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 11: 16 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 12: 11 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 13: 23 text blocks | 0 PDF annots | 11 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 14: 11 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 15: 9 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 16: 33 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 17: 18 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 18: 12 text blocks | 0 PDF annots | 9 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 19: 14 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 20: 14 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 21: 11 text blocks | 0 PDF annots | 9 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 22: 14 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 23: 12 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 24: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 25: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 26: 14 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 27: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 28: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 29: 13 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 30: 15 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 31: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 32: 16 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 33: 22 text blocks | 0 PDF annots | 24 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 34: 11 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 35: 13 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 36: 17 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 37: 18 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 38: 12 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 39: 11 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 40: 10 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 41: 12 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 42: 11 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 43: 16 text blocks | 0 PDF annots | 12 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 44: 22 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 45: 22 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 46: 22 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 47: 22 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 48: 27 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 49: 20 text blocks | 0 PDF annots | 13 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 50: 21 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 51: 21 text blocks | 0 PDF annots | 15 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 52: 9 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:32 | INFO | PDF page 53: 11 text blocks | 0 PDF annots | 31 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:33 | INFO | PDF page 54: 9 text blocks | 0 PDF annots | 5 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:33 | INFO | PDF page 55: 20 text blocks | 0 PDF annots | 65 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:33 | INFO | PDF page 56: 18 text blocks | 0 PDF annots | 29 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:33 | INFO | PDF page 57: 26 text blocks | 0 PDF annots | 29 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:22:33 | INFO | PDF processing done: 865 total chunks (865 proximity-mapped, 0 direct)
+2026-03-12 04:23:09 | INFO | PDF page 1: 27 text blocks | 0 PDF annots | 9 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:23:09 | INFO | PDF processing done: 27 total chunks (27 proximity-mapped, 0 direct)
+2026-03-12 04:24:24 | INFO | Chat response: query='hi' highlights=5 scores=[20, 21, 20, 19, 18]
+2026-03-12 04:32:39 | INFO | PDF page 1: 22 text blocks | 0 PDF annots | 2 drawings | 2 markers extracted | 0 direct chunks
+2026-03-12 04:32:39 | INFO | PDF page 2: 25 text blocks | 0 PDF annots | 12 drawings | 10 markers extracted | 0 direct chunks
+2026-03-12 04:32:39 | INFO | PDF page 3: 26 text blocks | 0 PDF annots | 13 drawings | 10 markers extracted | 0 direct chunks
+2026-03-12 04:32:39 | INFO | PDF page 4: 13 text blocks | 0 PDF annots | 8 drawings | 8 markers extracted | 0 direct chunks
+2026-03-12 04:32:39 | INFO | PDF processing done: 86 total chunks (86 proximity-mapped, 0 direct)
+2026-03-12 04:33:04 | INFO | PDF page 1: 27 text blocks | 0 PDF annots | 9 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:33:04 | INFO | PDF processing done: 27 total chunks (27 proximity-mapped, 0 direct)
+2026-03-12 04:39:52 | INFO | PDF page 1: 1 text blocks | 0 PDF annots | 38 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 2: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 3: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 4: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 5: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 6: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 7: 14 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 8: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 9: 14 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 10: 13 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 11: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 12: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 13: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 14: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 15: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 16: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 17: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 18: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 19: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 20: 7 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 21: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 22: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 23: 10 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 24: 14 text blocks | 0 PDF annots | 8 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 25: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 26: 15 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 27: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 28: 10 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 29: 2 text blocks | 0 PDF annots | 3 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 30: 12 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF page 31: 11 text blocks | 0 PDF annots | 7 drawings | 1 markers extracted | 0 direct chunks
+2026-03-12 04:39:52 | INFO | PDF processing done: 282 total chunks (282 proximity-mapped, 0 direct)
+2026-03-12 04:40:17 | INFO | Chat response: query='환경안전 직무는 어떤 포지션이 있지?' highlights=5 scores=[77, 59, 51, 45, 44]

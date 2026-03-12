@@ -26,14 +26,11 @@ class QueryRewriteSignature(dspy.Signature):
     )
     marker_filter: str = dspy.OutputField(
         desc=(
-            "One of: star, underline, squiggly, strikethrough, circle, highlight, arrow, bracket, "
-            "checkmark, box, ink_drawing, free_text, handwriting, or 'none' if no visual marker is referenced.  "
-            "'highlight' covers fluorescent/highlighter pen marks. "
-            "'squiggly' covers wavy underlines. "
-            "'strikethrough' covers struck-through text. "
-            "'free_text' covers typed annotation notes. "
-            "'handwriting' covers OCR'd handwritten text on image pages. "
-            "'box' covers rectangles, squares, or any rectangular shape drawn around text."
+            "Output 'annotated' when the user is asking about content that was marked, highlighted, "
+            "underlined, circled, boxed, starred, written on, or otherwise annotated with handwriting "
+            "or drawings – regardless of the specific shape or style of the marking. "
+            "Output 'none' when the user is asking about general content without any reference to "
+            "annotations or markings."
         )
     )
 

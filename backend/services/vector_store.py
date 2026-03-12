@@ -209,6 +209,14 @@ async def hybrid_search(
                 seen_ids.add(r.get("chunk_id"))
         logger.debug("After fallback merge: %d results", len(results))
 
+    # When there is no explicit marker filter, give annotated chunks a small score
+    # bonus so that hand-marked content naturally surfaces in general queries.
+    if not marker_type:
+        _ANNOTATED_BOOST = 0.05
+        for r in results:
+            if r.get("marker_type") == "annotated":
+                r["score"] = min(1.0, r.get("score", 0.0) + _ANNOTATED_BOOST)
+
     if use_mmr and results:
         results = _apply_mmr(query_vec, results, k=top_k, lambda_=mmr_lambda)
     else:

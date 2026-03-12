@@ -9,12 +9,10 @@
  */
 import { ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
+import workerSrc from 'pdfjs-dist/build/pdf.worker.mjs?url'
 import { getDocumentFileUrl } from '../services/api.js'
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.mjs',
-  import.meta.url,
-).toString()
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
 
 const props = defineProps({
   documentId: { type: String, default: null },
