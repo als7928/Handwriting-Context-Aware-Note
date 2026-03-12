@@ -1,7 +1,6 @@
 """Document upload and management endpoints."""
 
-from __future__ import annotations
-
+import logging
 import os
 import shutil
 import uuid
@@ -17,6 +16,7 @@ from services.db import get_db
 from services.spatial_chunker import process_pdf
 from services.vector_store import delete_by_document, upsert_chunks
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/documents", tags=["documents"])
 
 
@@ -39,59 +39,76 @@ async def upload_document(
     with open(file_path, "wb") as buf:
         shutil.copyfileobj(file.file, buf)
 
-    # Extract spatial chunks
-    chunks, page_count = process_pdf(file_path)
+    try:
+        # Extract spatial chunks
+        chunks, page_count = process_pdf(file_path)
+        logger.info("Extracted %d chunks from '%s'", len(chunks), file.filename)
 
-    # Save document record
-    doc = Document(
-        id=uuid.UUID(file_id),
-        filename=file.filename,
-        upload_path=file_path,
-        page_count=page_count,
-    )
-    db.add(doc)
-
-    # Build Qdrant payloads
-    payloads = [
-        SpatialChunkPayload(
-            chunk_id=c.id,
-            document_id=file_id,
-            page_no=c.page_no,
-            text=c.text,
-            x0=c.x0,
-            y0=c.y0,
-            x1=c.x1,
-            y1=c.y1,
-            marker_type=c.marker_type,
-            marker_distance=c.marker_distance,
+        # Save document record
+        doc = Document(
+            id=uuid.UUID(file_id),
+            filename=file.filename,
+            upload_path=file_path,
+            page_count=page_count,
         )
-        for c in chunks
-    ]
+        db.add(doc)
 
-    # Upsert into Qdrant
-    point_ids = await upsert_chunks(payloads)
-
-    # Save chunk records in PostgreSQL
-    for chunk_data, pid in zip(chunks, point_ids):
-        db.add(
-            SpatialChunk(
-                id=uuid.UUID(chunk_data.id),
-                document_id=uuid.UUID(file_id),
-                page_no=chunk_data.page_no,
-                text=chunk_data.text,
-                x0=chunk_data.x0,
-                y0=chunk_data.y0,
-                x1=chunk_data.x1,
-                y1=chunk_data.y1,
-                marker_type=chunk_data.marker_type,
-                marker_distance=chunk_data.marker_distance,
-                qdrant_point_id=pid,
+        # Build Qdrant payloads
+        payloads = [
+            SpatialChunkPayload(
+                chunk_id=c.id,
+                document_id=file_id,
+                page_no=c.page_no,
+                text=c.text,
+                x0=c.x0,
+                y0=c.y0,
+                x1=c.x1,
+                y1=c.y1,
+                marker_type=c.marker_type,
+                marker_distance=c.marker_distance,
             )
+            for c in chunks
+        ]
+
+        # Upsert into Qdrant (batched internally)
+        point_ids = await upsert_chunks(payloads)
+
+        # Bulk-insert chunk records into PostgreSQL
+        db.add_all(
+            [
+                SpatialChunk(
+                    id=uuid.UUID(chunk_data.id),
+                    document_id=uuid.UUID(file_id),
+                    page_no=chunk_data.page_no,
+                    text=chunk_data.text,
+                    x0=chunk_data.x0,
+                    y0=chunk_data.y0,
+                    x1=chunk_data.x1,
+                    y1=chunk_data.y1,
+                    marker_type=chunk_data.marker_type,
+                    marker_distance=chunk_data.marker_distance,
+                    qdrant_point_id=pid,
+                )
+                for chunk_data, pid in zip(chunks, point_ids)
+            ]
         )
 
-    await db.commit()
-    await db.refresh(doc)
-    return DocumentOut.model_validate(doc)
+        await db.commit()
+        await db.refresh(doc)
+        return DocumentOut.model_validate(doc)
+
+    except Exception as exc:
+        logger.error("Upload failed for '%s': %s", file.filename, exc, exc_info=True)
+        # Clean up uploaded file so disk doesn't accumulate orphaned PDFs
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        # Best-effort: remove any Qdrant points already written
+        try:
+            await delete_by_document(file_id)
+        except Exception:
+            pass
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Processing failed: {exc}")
 
 
 @router.get("/", response_model=list[DocumentOut])

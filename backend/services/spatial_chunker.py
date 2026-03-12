@@ -70,10 +70,47 @@ _TEXT_OVERLAY_TYPES: frozenset[int] = frozenset({
 })
 
 
+# ── Layout-element filter ─────────────────────────────────────────────────────
+
+# Marks wider / taller than these fractions of the page are almost certainly
+# printed layout rules or borders, not handwritten annotations.
+_MAX_MARK_WIDTH_RATIO: float = 0.45
+_MAX_MARK_HEIGHT_RATIO: float = 0.45
+# Minimum dimension (PDF points) – anything smaller is noise / sub-pixel artifact
+_MIN_MARK_PTS: float = 4.0
+
+
+def _is_layout_element(rect: fitz.Rect, page_rect: fitz.Rect) -> bool:
+    """Return True when a vector drawing is almost certainly a printed layout
+    element (horizontal rule, table border, decorative line) rather than a
+    handwritten mark.
+
+    Heuristics used (all in PDF-point units):
+    - Bounding box is sub-pixel / too small to be a real mark.
+    - Drawing spans ≥ 45 % of the page width or height  →  layout rule / border.
+    """
+    w, h = rect.width, rect.height
+    pw, ph = page_rect.width, page_rect.height
+
+    if w < _MIN_MARK_PTS and h < _MIN_MARK_PTS:
+        return True
+    if w > pw * _MAX_MARK_WIDTH_RATIO:
+        return True
+    if h > ph * _MAX_MARK_HEIGHT_RATIO:
+        return True
+
+    return False
+
+
 # ── Core extraction ──────────────────────────────────────────────────────────
 
 def extract_text_blocks(page: fitz.Page, page_no: int) -> list[RawTextBlock]:
-    """Extract text blocks with bounding boxes from a single page."""
+    """Extract text *blocks* (paragraphs) with bounding boxes from a single page.
+
+    Block-level granularity is intentional: a single annotation may span
+    multiple lines, and we want to surface all nearby context blocks as
+    candidates rather than over-precisely matching a single line.
+    """
     blocks: list[RawTextBlock] = []
     for b in page.get_text("dict", flags=fitz.TEXT_PRESERVE_WHITESPACE)["blocks"]:
         if b["type"] != 0:  # skip image blocks
@@ -173,6 +210,13 @@ def extract_markers(page: fitz.Page, page_no: int) -> list[MarkerAnnotation]:
     #    multi-stroke shapes (circles, boxes) are recognised as one unit.
     for cluster in _cluster_drawings(page.get_drawings()):
         r = cluster["rect"]
+        # Skip printed layout elements (rules, borders, table lines, etc.)
+        if _is_layout_element(r, page.rect):
+            logger.debug(
+                "Page %d: skipping layout drawing %.0fx%.0f at (%.0f,%.0f)",
+                page_no, r.width, r.height, r.x0, r.y0,
+            )
+            continue
         markers.append(
             MarkerAnnotation(
                 page_no=page_no,
@@ -230,22 +274,39 @@ def extract_annotated_text_chunks(page: fitz.Page, page_no: int) -> list[Spatial
     return chunks
 
 
-def extract_freetext_and_ink_chunks(page: fitz.Page, page_no: int) -> list[SpatialChunk]:
+def extract_freetext_and_ink_chunks(
+    page: fitz.Page,
+    page_no: int,
+    text_lines: list[RawTextBlock] | None = None,
+) -> list[SpatialChunk]:
     """Extract free-text (typed) annotation content and contextual text for ink strokes.
 
     - ``PDF_ANNOT_FREE_TEXT``: typed note/label added by the reader app;
       content is read directly from the annotation metadata.
-    - ``PDF_ANNOT_INK``: freehand pen strokes (digital handwriting). The stroke
-      paths themselves are not machine-readable without OCR, but any printed
-      text within the ink bounding box is captured as context.
+    - ``PDF_ANNOT_INK``: freehand pen strokes (digital handwriting).  The exact
+      search strategy is:
+
+      1. Direct: ``page.get_textbox(ink_rect)`` – works when ink is drawn
+         directly over text.
+      2. Expanded upward: many apps draw underlines *below* the text baseline,
+         so we expand the search rect upward by ``_INK_UP_EXPAND`` points.
+      3. Nearest-line fallback: if expansion still finds nothing, pick the
+         pre-extracted line whose rect overlaps an even wider search window.
+
+    Pass ``text_lines`` (from ``extract_text_blocks``) to enable strategies
+    2 and 3.
     """
+    # How far above the ink bbox to look for the annotated text line.
+    _INK_UP_EXPAND = 36  # ≈ 12.7 mm – covers one or two typical text lines
+    _INK_H_EXPAND = 6   # small horizontal tolerance
+    _INK_DOWN_EXPAND = 4
+
     chunks: list[SpatialChunk] = []
     for annot in page.annots() or []:
         type_id = annot.type[0] if annot.type else -1
         rect = annot.rect
 
         if type_id == fitz.PDF_ANNOT_FREE_TEXT:
-            # Typed note added directly onto the PDF page
             content = (annot.info.get("content") or "").strip()
             if content:
                 chunks.append(
@@ -262,9 +323,40 @@ def extract_freetext_and_ink_chunks(page: fitz.Page, page_no: int) -> list[Spati
                 )
 
         elif type_id == fitz.PDF_ANNOT_INK:
-            # Ink strokes: try to read printed text the user wrote over/around.
-            # Works when the stylus was used over or very near existing text.
+            # Strategy 1: direct textbox lookup
             underlying = page.get_textbox(rect).strip()
+
+            if not underlying:
+                # Strategy 2: expand upward – underlines are drawn below text
+                expanded = fitz.Rect(
+                    rect.x0 - _INK_H_EXPAND,
+                    rect.y0 - _INK_UP_EXPAND,
+                    rect.x1 + _INK_H_EXPAND,
+                    rect.y1 + _INK_DOWN_EXPAND,
+                ).intersect(page.rect)
+                underlying = page.get_textbox(expanded).strip()
+
+            if not underlying and text_lines:
+                # Strategy 3: find pre-extracted lines whose bbox overlaps
+                # the expanded rect and join their text.
+                expanded = fitz.Rect(
+                    rect.x0 - _INK_H_EXPAND,
+                    rect.y0 - _INK_UP_EXPAND,
+                    rect.x1 + _INK_H_EXPAND,
+                    rect.y1 + _INK_DOWN_EXPAND,
+                ).intersect(page.rect)
+                matched = [
+                    ln for ln in text_lines
+                    if ln.page_no == page_no
+                    and not fitz.Rect(ln.x0, ln.y0, ln.x1, ln.y1).intersect(expanded).is_empty
+                ]
+                if matched:
+                    underlying = " ".join(ln.text for ln in matched)
+                    logger.debug(
+                        "Page %d INK: matched %d lines via expanded search",
+                        page_no, len(matched),
+                    )
+
             if underlying:
                 chunks.append(
                     SpatialChunk(
@@ -316,7 +408,13 @@ def _try_ocr_chunks(page: fitz.Page, page_no: int) -> list[SpatialChunk]:
             if type_id != fitz.PDF_ANNOT_INK:
                 continue
             rect = annot.rect
-            if page.get_textbox(rect).strip():
+            # Check both the direct rect and the expanded rect used by
+            # extract_freetext_and_ink_chunks – skip if text was already found.
+            expanded = fitz.Rect(
+                rect.x0 - 6, rect.y0 - 36,
+                rect.x1 + 6, rect.y1 + 4,
+            ).intersect(page.rect)
+            if page.get_textbox(expanded).strip():
                 continue  # already captured by extract_freetext_and_ink_chunks
             text = ocr_region(page, rect)
             if text:
@@ -343,16 +441,34 @@ def _euclidean(ax: float, ay: float, bx: float, by: float) -> float:
     return math.sqrt((ax - bx) ** 2 + (ay - by) ** 2)
 
 
+def _distance_to_rect(
+    px: float, py: float,
+    bx0: float, by0: float, bx1: float, by1: float,
+) -> float:
+    """Minimum distance from point (px, py) to a rectangle.
+
+    Returns 0 when the point is inside the rectangle.  This is more accurate
+    than centre-to-centre distance for margin marks (stars, arrows) that are
+    placed to the left/right of a line rather than directly over it.
+    """
+    dx = max(bx0 - px, 0.0, px - bx1)
+    dy = max(by0 - py, 0.0, py - by1)
+    return math.sqrt(dx * dx + dy * dy)
+
+
 def _rects_overlap(
     bx0: float, by0: float, bx1: float, by1: float,
     mx0: float, my0: float, mx1: float, my1: float,
-    h_padding: float = 15.0,
-    v_padding: float = 35.0,
+    h_padding: float = 8.0,
+    v_padding: float = 12.0,
 ) -> bool:
     """Return True when the marker rect overlaps or is near the text block.
 
-    Asymmetric padding: larger *v_padding* catches markers drawn below text
-    (hand-drawn underlines) and markers that surround text (circles, boxes).
+    Padding values are intentionally conservative to avoid tagging unrelated
+    text blocks as annotated:
+    - h_padding  8 pts ≈ 2.8 mm – small horizontal tolerance
+    - v_padding 12 pts ≈ 4.2 mm – catches underlines drawn just below a line
+      of text and circles that slightly miss the text bounding box
     """
     return (
         mx0 - h_padding <= bx1
@@ -365,44 +481,47 @@ def _rects_overlap(
 def map_markers_to_blocks(
     blocks: list[RawTextBlock],
     markers: list[MarkerAnnotation],
-    max_distance: float = 250.0,
+    max_distance: float = 150.0,
+    top_k: int = 4,
 ) -> dict[int, list[tuple[str, float]]]:
-    """For each marker, find the nearest text block within *max_distance*.
+    """For each marker, collect the *top_k* nearest text blocks within
+    *max_distance* and tag all of them as annotated.
 
-    Rect overlap is treated as distance 0.  Falls back to Euclidean distance.
+    Recall-first strategy: rather than trying to pinpoint the exact block
+    a user marked, we surface all plausible candidates in the vicinity so
+    that retrieval can rank them.  A single annotation can therefore tag
+    multiple nearby blocks.
+
+    max_distance=150 PDF points ≈ 53 mm – wide enough to catch margin marks
+    and annotations that span paragraph boundaries.
+    top_k=4 – at most 4 blocks per marker to avoid tagging the whole page.
+
     Returns ``block_index -> [(marker_type, distance), ...]``.
-    A single block can have MULTIPLE distinct marker types (e.g. underline AND
-    circle), producing one SpatialChunk per marker type.
     """
     block_markers: dict[int, list[tuple[str, float]]] = {}
 
     for marker in markers:
-        best_idx, best_dist = -1, float("inf")
-        has_rect = marker.x1 > marker.x0 and marker.y1 > marker.y0
+        # Collect all blocks on the same page, sorted by edge distance
+        candidates: list[tuple[int, float]] = []
         for idx, block in enumerate(blocks):
             if block.page_no != marker.page_no:
                 continue
-            if has_rect and _rects_overlap(
+            dist = _distance_to_rect(
+                marker.cx, marker.cy,
                 block.x0, block.y0, block.x1, block.y1,
-                marker.x0, marker.y0, marker.x1, marker.y1,
-            ):
-                dist = 0.0
-            else:
-                cx, cy = _block_centre(block)
-                dist = _euclidean(cx, cy, marker.cx, marker.cy)
-            if dist < best_dist:
-                best_idx, best_dist = idx, dist
+            )
+            if dist <= max_distance:
+                candidates.append((idx, dist))
 
-        if best_idx < 0 or best_dist > max_distance:
-            continue
-
-        entry = block_markers.setdefault(best_idx, [])
-        # Per block, keep one entry per marker_type (closest wins)
-        type_idx = {m[0]: i for i, m in enumerate(entry)}
-        if marker.marker_type not in type_idx:
-            entry.append((marker.marker_type, best_dist))
-        elif best_dist < entry[type_idx[marker.marker_type]][1]:
-            entry[type_idx[marker.marker_type]] = (marker.marker_type, best_dist)
+        # Keep only the top_k closest
+        candidates.sort(key=lambda t: t[1])
+        for idx, dist in candidates[:top_k]:
+            entry = block_markers.setdefault(idx, [])
+            type_idx = {m[0]: i for i, m in enumerate(entry)}
+            if marker.marker_type not in type_idx:
+                entry.append((marker.marker_type, dist))
+            elif dist < entry[type_idx[marker.marker_type]][1]:
+                entry[type_idx[marker.marker_type]] = (marker.marker_type, dist)
 
     return block_markers
 
@@ -428,7 +547,7 @@ def process_pdf(file_path: str) -> tuple[list[SpatialChunk], int]:
         page_markers = extract_markers(page, page_1)
         page_direct = (
             extract_annotated_text_chunks(page, page_1)
-            + extract_freetext_and_ink_chunks(page, page_1)
+            + extract_freetext_and_ink_chunks(page, page_1, text_lines=page_blocks)
             + _try_ocr_chunks(page, page_1)
         )
 

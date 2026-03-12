@@ -1,6 +1,6 @@
 # Handwriting Context-Aware Note
 
-An AI-powered note search system that **detects handwritten annotations** (underlines, circles, ink drawings, etc.) in PDF documents and answers questions like "What did I mark here?"
+An AI-powered note search system that **detects handwritten annotations** (underlines, circles, ink drawings, etc.) in PDF documents and answers questions like "I can't remember what I underlined when studying AI".
 
 ## Architecture
 

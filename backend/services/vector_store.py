@@ -45,10 +45,15 @@ async def ensure_collection() -> None:
         )
 
 
+# Maximum number of points sent to Qdrant in a single upsert request.
+# Keeps each gRPC/HTTP payload well under the 64 MB default limit.
+_UPSERT_BATCH_SIZE = 200
+
+
 async def upsert_chunks(
     chunks: list[SpatialChunkPayload],
 ) -> list[str]:
-    """Embed and upsert spatial chunks into Qdrant. Returns point IDs."""
+    """Embed and upsert spatial chunks into Qdrant in batches. Returns point IDs."""
     client = _get_client()
     texts = [c.text for c in chunks]
     vectors = await embed_texts(texts)
@@ -66,7 +71,15 @@ async def upsert_chunks(
             )
         )
 
-    await client.upsert(collection_name=settings.qdrant_collection, points=points)
+    # Send in batches to avoid exceeding Qdrant's payload size limit
+    for i in range(0, len(points), _UPSERT_BATCH_SIZE):
+        batch = points[i : i + _UPSERT_BATCH_SIZE]
+        await client.upsert(collection_name=settings.qdrant_collection, points=batch)
+        logger.debug(
+            "Qdrant upsert batch %d-%d / %d",
+            i + 1, min(i + _UPSERT_BATCH_SIZE, len(points)), len(points),
+        )
+
     return point_ids
 
 
