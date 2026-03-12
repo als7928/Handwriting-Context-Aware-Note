@@ -1094,3 +1094,26 @@
 2026-03-12 08:41:28 | INFO | Extracted 732 chunks from 'Mars - Wikipedia.pdf'
 2026-03-12 08:42:07 | INFO | Chat response: query='화성에 대해 공부할 때 중요하다고 동그라미 표시했던게 있었는데 기억이 안나.' highlights=5 scores=[55, 54, 49, 51, 53]
 2026-03-12 08:43:00 | INFO | Chat response: query='1페이지에서 가장 먼저 밑줄 그었던거를 알려' highlights=5 scores=[30, 33, 22, 25, 19]
+2026-03-12 10:16:29 | INFO | PDF page 1: 15 text blocks | 0 PDF annots | 3 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 2: 13 text blocks | 1 PDF annots | 1 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 3: 8 text blocks | 1 PDF annots | 1 drawings | 1 markers extracted | 1 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 4: 14 text blocks | 1 PDF annots | 14 drawings | 2 markers extracted | 1 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 5: 18 text blocks | 0 PDF annots | 1 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 6: 15 text blocks | 0 PDF annots | 3 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 7: 16 text blocks | 0 PDF annots | 0 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 8: 23 text blocks | 0 PDF annots | 8 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 9: 18 text blocks | 0 PDF annots | 53 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 10: 17 text blocks | 0 PDF annots | 33 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 11: 21 text blocks | 0 PDF annots | 0 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 12: 17 text blocks | 0 PDF annots | 0 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 13: 69 text blocks | 0 PDF annots | 624 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:29 | INFO | PDF page 14: 112 text blocks | 0 PDF annots | 1030 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:30 | INFO | PDF page 15: 112 text blocks | 0 PDF annots | 947 drawings | 0 markers extracted | 0 direct chunks
+2026-03-12 10:16:30 | INFO | PDF processing done: 491 total chunks (488 proximity-mapped, 3 direct)
+2026-03-12 10:16:30 | INFO | Extracted 491 chunks from 'Attention_is_all_you_need.pdf'
+2026-03-12 10:17:18 | INFO | Chat response: query='Scaled dot-product attention 부분에 내가 밑줄친 부분이 뭐였지?' highlights=5 scores=[64, 59, 57, 45, 37]
+2026-03-12 10:18:25 | INFO | Chat response: query='모델 아키텍쳐 부분에서 내가 강조했던 문장이 뭐였더라?' highlights=5 scores=[32, 28, 25, 33, 23]
+2026-03-12 10:19:25 | INFO | Chat response: query='왜 영어로 대답해?' highlights=5 scores=[27, 31, 31, 27, 25]
+2026-03-12 10:19:37 | INFO | Chat response: query='한국어 하라' highlights=5 scores=[30, 26, 26, 26, 26]
+2026-03-12 10:19:55 | INFO | Chat response: query='Show me the part I underlined' highlights=5 scores=[29, 17, 24, 21, 16]
+2026-03-12 10:20:55 | INFO | Chat response: query='트랜스포머 부분에 내가 밑줄 쳤던 문장이 뭐더라?' highlights=5 scores=[40, 46, 32, 31, 36]

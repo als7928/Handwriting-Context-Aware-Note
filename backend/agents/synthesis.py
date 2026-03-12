@@ -34,6 +34,7 @@ Marker types you may encounter:
 - handwriting: OCR'd text from a handwritten page
 
 Rules:
+- Detect the language of the user's question and respond in that same language.
 - Provide a clear, concise answer based ONLY on the provided excerpts.
 - Reference specific pages and marker types when relevant (e.g. "the highlighted text on page 3").
 - Treat 'free_text' excerpts as the user's own typed notes.
@@ -47,10 +48,27 @@ async def synthesis_node(state: AgentState) -> AgentState:
     """Generate a summary answer and collect highlight locations."""
     chunks = state.get("reranked_chunks", [])
 
+    llm = ChatOpenAI(
+        model=settings.llm_model,
+        api_key=settings.openai_api_key,
+        temperature=0.3,
+    )
+
     if not chunks:
+        try:
+            no_result_messages = [
+                SystemMessage(content=_SYSTEM_PROMPT),
+                HumanMessage(
+                    content=f"User question: {state['raw_query']}\n\nRelevant excerpts:\n(none)"
+                ),
+            ]
+            no_result_response = await llm.ainvoke(no_result_messages)
+            no_result_answer = no_result_response.content
+        except Exception:
+            no_result_answer = "I couldn't find any relevant content matching your query in the uploaded documents."
         return {
             **state,
-            "answer": "I couldn't find any relevant content matching your query in the uploaded documents.",
+            "answer": no_result_answer,
             "highlights": [],
         }
 
@@ -62,12 +80,6 @@ async def synthesis_node(state: AgentState) -> AgentState:
             f"Excerpt {i} (Page {c['page_no']}{marker_info}):\n{c['text']}"
         )
     context = "\n\n".join(context_parts)
-
-    llm = ChatOpenAI(
-        model=settings.llm_model,
-        api_key=settings.openai_api_key,
-        temperature=0.3,
-    )
 
     messages = [
         SystemMessage(content=_SYSTEM_PROMPT),
@@ -81,7 +93,7 @@ async def synthesis_node(state: AgentState) -> AgentState:
     except Exception as exc:
         logger.warning("Synthesis LLM call failed. Falling back to extractive answer. error=%s", exc)
         bullets = [f"- p.{c['page_no']}: {c['text'][:220]}" for c in chunks[:3]]
-        answer_text = "I found relevant excerpts, but generation failed. Here are the top matches:\n\n" + "\n".join(bullets)
+        answer_text = "\n".join(bullets)
 
     highlights = [
         {
