@@ -129,3 +129,17 @@ docker build -t spatial-note-backend .
 docker run -p 8000:8000 --env-file .env spatial-note-backend
 ```
 
+The backend Docker image now keeps only the project source, `pyproject.toml`,
+`uv.lock`, and the `uv` binary. The container starts with `uv run`, so the
+baked image stays smaller than shipping a full prebuilt `.venv` inside it.
+
+It also defaults to CPU-only PyTorch wheels because OCR is initialised with
+`gpu=False`. If you really need CUDA wheels, override the container command or
+build your own image variant with a CUDA index URL:
+
+```bash
+docker build \
+    --build-arg PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu121 \
+    -t spatial-note-backend .
+```
+
