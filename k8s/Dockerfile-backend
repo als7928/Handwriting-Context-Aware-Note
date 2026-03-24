@@ -1,0 +1,32 @@
+FROM python:3.11.9-slim
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgomp1 \
+        libglib2.0-0 \
+        libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml uv.lock ./
+
+COPY main.py config.py logging_config.py ./
+COPY agents ./agents
+COPY api ./api
+COPY models ./models
+COPY services ./services
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTORCH_INDEX_URL=${PYTORCH_INDEX_URL} \
+    UV_PYTHON_DOWNLOADS=never
+
+RUN mkdir -p uploads logs
+
+EXPOSE 8000
+
+CMD ["sh", "-c", "uv run --frozen --no-dev --index-url \"$PYTORCH_INDEX_URL\" uvicorn main:app --host 0.0.0.0 --port 8000 --timeout-keep-alive 120"]

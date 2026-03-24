@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sk047-myservice-qdrant
+  namespace: class-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sk047-myservice-qdrant
+  template:
+    metadata:
+      labels:
+        app: sk047-myservice-qdrant
+    spec:
+      containers:
+        - name: qdrant
+          image: qdrant/qdrant:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6333
+              name: http
+            - containerPort: 6334
+              name: grpc
+          volumeMounts:
+            - name: qdrant-data
+              mountPath: /qdrant/storage
+          readinessProbe:
+            tcpSocket:
+              port: 6333
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: 6333
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+      volumes:
+        - name: qdrant-data
+          persistentVolumeClaim:
+            claimName: sk047-myservice-qdrant-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sk047-myservice-qdrant
+  namespace: class-2
+spec:
+  selector:
+    app: sk047-myservice-qdrant
+  ports:
+    - name: http
+      port: 6333
+      targetPort: 6333
+    - name: grpc
+      port: 6334
+      targetPort: 6334

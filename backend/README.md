@@ -88,7 +88,13 @@ uv run python main.py
 
 ```bash
 curl http://127.0.0.1:8000/api/health
-# {"status":"ok"}
+# detailed health summary
+
+curl http://127.0.0.1:8000/api/health/live
+# liveness probe
+
+curl http://127.0.0.1:8000/api/health/ready
+# readiness probe
 ```
 
 ## API Endpoints
@@ -100,7 +106,9 @@ curl http://127.0.0.1:8000/api/health
 | `GET` | `/api/documents/{id}/file` | Download the original PDF |
 | `DELETE` | `/api/documents/{id}` | Delete document (DB + Qdrant) |
 | `POST` | `/api/chat/` | Query answering (RAG pipeline) |
-| `GET` | `/api/health` | Server health check |
+| `GET` | `/api/health` | Detailed health summary |
+| `GET` | `/api/health/live` | Liveness probe |
+| `GET` | `/api/health/ready` | Readiness probe |
 
 ## Environment Variables
 

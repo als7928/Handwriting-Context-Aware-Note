@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 import logging
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from logging_config import setup_logging
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,6 +13,7 @@ from config import settings
 from api.documents import router as documents_router
 from models.database import Base
 from services.db import engine, ensure_database_exists
+from services.health import build_liveness_payload, build_readiness_payload
 from services.vector_store import ensure_collection
 
 
@@ -66,8 +68,31 @@ app.include_router(chat_router, prefix="/api")
 
 @app.get("/api/health")
 async def health_check():
-    """Simple readiness probe."""
-    return {"status": "ok"}
+    """Detailed health summary for external checks."""
+    live = build_liveness_payload()
+    ready, is_ready = await build_readiness_payload()
+    payload = {
+        "status": "ok" if is_ready else "degraded",
+        "timestamp": ready["timestamp"],
+        "checks": {
+            **live["checks"],
+            **ready["checks"],
+        },
+    }
+    return JSONResponse(status_code=200 if is_ready else 503, content=payload)
+
+
+@app.get("/api/health/live")
+async def liveness_check():
+    """Liveness probe endpoint."""
+    return build_liveness_payload()
+
+
+@app.get("/api/health/ready")
+async def readiness_check():
+    """Readiness probe endpoint with dependency checks."""
+    payload, is_ready = await build_readiness_payload()
+    return JSONResponse(status_code=200 if is_ready else 503, content=payload)
 
 
 if __name__ == "__main__":

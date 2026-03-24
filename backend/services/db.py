@@ -4,6 +4,7 @@ import logging
 from urllib.parse import urlparse
 
 import asyncpg
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from config import settings
@@ -49,6 +50,17 @@ async def ensure_database_exists() -> None:
 
 engine = create_async_engine(settings.database_url, echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+async def check_database_ready() -> tuple[bool, str]:
+    """Check whether PostgreSQL is reachable from the application."""
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+        return True, "database reachable"
+    except Exception as exc:
+        logger.warning("Database readiness check failed: %s", exc)
+        return False, str(exc)
 
 
 async def get_db() -> AsyncSession:  # type: ignore[misc]

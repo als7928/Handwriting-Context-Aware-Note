@@ -33,6 +33,20 @@ def _get_client() -> AsyncQdrantClient:
     return _client
 
 
+async def check_qdrant_ready() -> tuple[bool, str]:
+    """Check whether Qdrant is reachable and the target collection is visible."""
+    try:
+        client = _get_client()
+        collections = await client.get_collections()
+        names = [c.name for c in collections.collections]
+        if settings.qdrant_collection in names:
+            return True, f"collection '{settings.qdrant_collection}' ready"
+        return True, f"Qdrant reachable; collection '{settings.qdrant_collection}' not created yet"
+    except Exception as exc:
+        logger.warning("Qdrant readiness check failed: %s", exc)
+        return False, str(exc)
+
+
 async def ensure_collection() -> None:
     """Create the Qdrant collection if it does not yet exist."""
     client = _get_client()
