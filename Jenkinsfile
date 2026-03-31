@@ -1,6 +1,12 @@
 pipeline {
-    // CHANGE 'any' to 'docker' or the specific label provided by your admin
+    // 1. Ensure your Jenkins node has the label 'docker'
     agent { label 'docker' } 
+
+    // 2. The name 'jenkins-docker' must match the 'Name' field in your 
+    //    Jenkins Global Tool Configuration -> Docker section.
+    tools {
+        docker 'jenkins-docker' 
+    }
 
     environment {
         HARBOR_URL = 'amdp-registry.skala-ai.com'
@@ -25,7 +31,9 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 2: Build'
+                    // Building Backend
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
+                    // Building Frontend
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                 }
             }
@@ -34,14 +42,15 @@ pipeline {
         stage('Test') {
             steps {
                 echo '>>> Stage 3: Test'
-                sh "echo 'Testing images...'"
+                sh "docker --version"
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
-                    echo '>>> Stage 4: Deploy'
+                    echo '>>> Stage 4: Deploy (Push to Harbor)'
+                    // This block requires 'Docker Pipeline' plugin and 'harbor-robot-account' credentials
                     docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
@@ -52,8 +61,13 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Finalizing pipeline...'
+        success {
+            echo 'SUCCESS: Images pushed to Harbor.'
+            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
+            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
+        }
+        failure {
+            echo 'FAILURE: Check Docker tool name or Node permissions.'
         }
     }
 }
