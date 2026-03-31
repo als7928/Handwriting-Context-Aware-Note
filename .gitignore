@@ -57,3 +57,5 @@ dist/
 # OS
 .env
 uploads/
+
+k8s/02-secret.yaml
