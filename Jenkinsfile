@@ -1,5 +1,12 @@
 pipeline {
+    // 반드시 관리자가 지정한 'docker' 라벨 사용
     agent { label 'docker' } 
+
+    tools {
+        // 별칭 대신 전체 클래스 경로를 사용합니다. 
+        // 'jenkins-docker'는 Global Tool Configuration에 등록한 Name과 반드시 같아야 합니다.
+        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'jenkins-docker'
+    }
 
     environment {
         HARBOR_URL = 'amdp-registry.skala-ai.com'
@@ -24,13 +31,9 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 2: Build'
-                    // PATH를 직접 여러 곳 지정하여 docker를 강제로 찾게 함
-                    withEnv(["PATH+EXTRA=/usr/bin:/usr/local/bin:/bin"]) {
-                        sh "docker --version" // 여기서도 에러 나면 노드에 도커가 없는 것임
-                        
-                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
-                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
-                    }
+                    // 도구가 올바르게 로드되었다면 sh "docker ..."가 실행됩니다.
+                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
+                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                 }
             }
         }
@@ -38,7 +41,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo '>>> Stage 3: Test'
-                sh "echo 'Validation Complete'"
+                sh "docker --version"
             }
         }
 
@@ -46,11 +49,10 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 4: Deploy'
-                    withEnv(["PATH+EXTRA=/usr/bin:/usr/local/bin:/bin"]) {
-                        docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
-                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
-                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
-                        }
+                    // Harbor 인증 및 이미지 푸시
+                    docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
+                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
+                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
                     }
                 }
             }
@@ -59,10 +61,12 @@ pipeline {
 
     post {
         success {
-            echo 'SUCCESS: Done'
+            echo 'SUCCESS: Both backend and frontend images are pushed.'
+            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
+            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
         }
         failure {
-            echo 'FAILURE: Check if Docker is installed on the node or the tool name is correct.'
+            echo 'FAILURE: If "docker: not found" persists, check Global Tool Configuration Name.'
         }
     }
 }
