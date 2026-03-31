@@ -26,13 +26,18 @@ pipeline {
                 checkout scm
             }
         }
-
         stage('Build') {
             steps {
                 script {
                     echo '>>> Stage 2: Build'
-                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
-                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
+                    // Global Tool Configuration에서 만든 이름을 변수에 담음
+                    def dockerBin = tool name: 'jenkins-docker', type: 'dockerTool'
+                    
+                    // Docker 실행 파일의 경로를 환경변수에 강제로 추가
+                    withEnv(["PATH+DOCKER=${dockerBin}/bin"]) {
+                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
+                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
+                    }
                 }
             }
         }
