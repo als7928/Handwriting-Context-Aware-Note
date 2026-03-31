@@ -1,10 +1,8 @@
 pipeline {
-    // 1. Agent label: docker
     agent { label 'docker' } 
 
-    // 2. Tool type을 'docker'에서 'dockerTool'로 변경합니다.
-    // 'jenkins-docker'는 Global Tool Configuration에 등록하신 Name과 같아야 합니다.
     tools {
+        // Global Tool Configuration에서 등록한 이름과 일치해야 합니다.
         dockerTool 'jenkins-docker' 
     }
 
@@ -26,16 +24,23 @@ pipeline {
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 script {
                     echo '>>> Stage 2: Build'
-                    // Global Tool Configuration에서 만든 이름을 변수에 담음
-                    def dockerBin = tool name: 'jenkins-docker', type: 'dockerTool'
                     
-                    // Docker 실행 파일의 경로를 환경변수에 강제로 추가
-                    withEnv(["PATH+DOCKER=${dockerBin}/bin"]) {
+                    // 1. 도구가 설치된 경로를 직접 변수에 담습니다.
+                    def dockerHome = tool name: 'jenkins-docker', type: 'dockerTool'
+                    
+                    // 2. 해당 경로의 bin 폴더를 PATH에 추가하여 실행합니다.
+                    withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
+                        echo "Using Docker from: ${dockerHome}/bin"
+                        
+                        // Backend Build
                         sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
+                        
+                        // Frontend Build
                         sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                     }
                 }
@@ -45,7 +50,12 @@ pipeline {
         stage('Test') {
             steps {
                 echo '>>> Stage 3: Test'
-                sh "docker --version"
+                script {
+                    def dockerHome = tool name: 'jenkins-docker', type: 'dockerTool'
+                    withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
+                        sh "docker --version"
+                    }
+                }
             }
         }
 
@@ -53,9 +63,14 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 4: Deploy'
-                    docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
-                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
-                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
+                    def dockerHome = tool name: 'jenkins-docker', type: 'dockerTool'
+                    
+                    withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
+                        // docker.withRegistry 구문도 내부적으로 docker 명령어를 쓰므로 PATH 안에서 실행
+                        docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
+                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
+                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
+                        }
                     }
                 }
             }
@@ -64,9 +79,10 @@ pipeline {
 
     post {
         success {
-            echo 'SUCCESS: All stages finished.'
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
+            echo 'SUCCESS: All images pushed to Harbor.'
+        }
+        failure {
+            echo 'FAILURE: Still getting "docker: not found". Please check Global Tool Configuration.'
         }
     }
 }
