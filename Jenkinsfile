@@ -1,7 +1,6 @@
 pipeline {
-    // If 'any' fails, replace with the specific label of a node that has Docker
-    // e.g., agent { label 'docker-enabled-node' }
-    agent any 
+    // CHANGE 'any' to 'docker' or the specific label provided by your admin
+    agent { label 'docker' } 
 
     environment {
         HARBOR_URL = 'amdp-registry.skala-ai.com'
@@ -17,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '>>> Stage 1: Fetching source code'
+                echo '>>> Stage 1: Checkout'
                 checkout scm
             }
         }
@@ -25,8 +24,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo '>>> Stage 2: Building images'
-                    // Using sh only if the binary exists; otherwise this stage will fail
+                    echo '>>> Stage 2: Build'
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                 }
@@ -35,16 +33,15 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo '>>> Stage 3: Testing environment'
-                sh "echo 'Testing connectivity to ${HARBOR_URL}'"
+                echo '>>> Stage 3: Test'
+                sh "echo 'Testing images...'"
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
-                    echo '>>> Stage 4: Pushing to Harbor'
-                    // This block requires the "Docker Pipeline" plugin to be installed in Jenkins
+                    echo '>>> Stage 4: Deploy'
                     docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
@@ -55,13 +52,8 @@ pipeline {
     }
 
     post {
-        success {
-            echo 'SUCCESS: Pipeline finished'
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
-        }
-        failure {
-            echo 'FAILURE: Check if Docker is installed on the Jenkins Agent'
+        always {
+            echo 'Finalizing pipeline...'
         }
     }
 }
