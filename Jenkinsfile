@@ -1,11 +1,11 @@
 pipeline {
-    // 1. Ensure your Jenkins node has the label 'docker'
+    // 1. Agent label: docker
     agent { label 'docker' } 
 
-    // 2. The name 'jenkins-docker' must match the 'Name' field in your 
-    //    Jenkins Global Tool Configuration -> Docker section.
+    // 2. Tool type을 'docker'에서 'dockerTool'로 변경합니다.
+    // 'jenkins-docker'는 Global Tool Configuration에 등록하신 Name과 같아야 합니다.
     tools {
-        docker 'jenkins-docker' 
+        dockerTool 'jenkins-docker' 
     }
 
     environment {
@@ -31,9 +31,7 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 2: Build'
-                    // Building Backend
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
-                    // Building Frontend
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                 }
             }
@@ -49,8 +47,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo '>>> Stage 4: Deploy (Push to Harbor)'
-                    // This block requires 'Docker Pipeline' plugin and 'harbor-robot-account' credentials
+                    echo '>>> Stage 4: Deploy'
                     docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
@@ -62,12 +59,9 @@ pipeline {
 
     post {
         success {
-            echo 'SUCCESS: Images pushed to Harbor.'
+            echo 'SUCCESS: All stages finished.'
             sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
             sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
-        }
-        failure {
-            echo 'FAILURE: Check Docker tool name or Node permissions.'
         }
     }
 }
