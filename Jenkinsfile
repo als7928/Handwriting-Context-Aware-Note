@@ -1,10 +1,8 @@
 pipeline {
-    // 반드시 관리자가 지정한 'docker' 라벨 사용
     agent { label 'docker' } 
 
     tools {
-        // 별칭 대신 전체 클래스 경로를 사용합니다. 
-        // 'jenkins-docker'는 Global Tool Configuration에 등록한 Name과 반드시 같아야 합니다.
+        // 클래스 경로와 이름을 정확히 명시
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'jenkins-docker'
     }
 
@@ -22,7 +20,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '>>> Stage 1: Checkout'
                 checkout scm
             }
         }
@@ -30,18 +27,19 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo '>>> Stage 2: Build'
-                    // 도구가 올바르게 로드되었다면 sh "docker ..."가 실행됩니다.
-                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
-                    sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
+                    echo '>>> Stage 2: Build with Latest Docker'
+                    
+                    // 도구 경로를 다시 한번 확인하고 PATH 최상단에 주입
+                    def dockerHome = tool name: 'jenkins-docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+                    
+                    withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
+                        // 현재 사용 중인 도커 버전을 로그로 출력해서 확인 (1.29인지 최신인지)
+                        sh "docker version" 
+                        
+                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
+                        sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
+                    }
                 }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo '>>> Stage 3: Test'
-                sh "docker --version"
             }
         }
 
@@ -49,24 +47,15 @@ pipeline {
             steps {
                 script {
                     echo '>>> Stage 4: Deploy'
-                    // Harbor 인증 및 이미지 푸시
-                    docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
-                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
-                        sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
+                    def dockerHome = tool name: 'jenkins-docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
+                    withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
+                        docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
+                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
+                            sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
+                        }
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'SUCCESS: Both backend and frontend images are pushed.'
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
-            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
-        }
-        failure {
-            echo 'FAILURE: If "docker: not found" persists, check Global Tool Configuration Name.'
         }
     }
 }
