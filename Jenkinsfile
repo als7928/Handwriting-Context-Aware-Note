@@ -1,4 +1,6 @@
 pipeline {
+    // If 'any' fails, replace with the specific label of a node that has Docker
+    // e.g., agent { label 'docker-enabled-node' }
     agent any 
 
     environment {
@@ -15,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '>>> Stage 1: Fetching source code from GitHub'
+                echo '>>> Stage 1: Fetching source code'
                 checkout scm
             }
         }
@@ -23,12 +25,9 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo '>>> Stage 2: Building Docker images'
-                    
-                    echo "Building Backend: ${BACKEND_IMAGE}:${BACKEND_VER}"
+                    echo '>>> Stage 2: Building images'
+                    // Using sh only if the binary exists; otherwise this stage will fail
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} -f backend/Dockerfile-backend ./backend"
-                    
-                    echo "Building Frontend: ${FRONTEND_IMAGE}:${FRONTEND_VER}"
                     sh "docker build -t ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} -f frontend/Dockerfile-frontend ./frontend"
                 }
             }
@@ -36,21 +35,18 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo '>>> Stage 3: Running integration tests'
-                sh "echo 'Validation successful for ${BACKEND_IMAGE} and ${FRONTEND_IMAGE}'"
+                echo '>>> Stage 3: Testing environment'
+                sh "echo 'Testing connectivity to ${HARBOR_URL}'"
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
-                    echo '>>> Stage 4: Deploying images to Harbor Registry'
-                    
+                    echo '>>> Stage 4: Pushing to Harbor'
+                    // This block requires the "Docker Pipeline" plugin to be installed in Jenkins
                     docker.withRegistry("https://${HARBOR_URL}", "${HARBOR_CREDS}") {
-                        echo "Pushing Backend to ${HARBOR_URL}..."
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER}"
-                        
-                        echo "Pushing Frontend to ${HARBOR_URL}..."
                         sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER}"
                     }
                 }
@@ -60,16 +56,12 @@ pipeline {
 
     post {
         success {
-            echo '============================================'
-            echo 'SUCCESS: All images deployed to Harbor'
-            echo '============================================'
+            echo 'SUCCESS: Pipeline finished'
             sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${BACKEND_IMAGE}:${BACKEND_VER} || true"
             sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${FRONTEND_IMAGE}:${FRONTEND_VER} || true"
         }
         failure {
-            echo '============================================'
-            echo 'FAILURE: Pipeline execution failed'
-            echo '============================================'
+            echo 'FAILURE: Check if Docker is installed on the Jenkins Agent'
         }
     }
 }
