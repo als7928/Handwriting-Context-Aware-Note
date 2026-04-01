@@ -204,17 +204,6 @@ jobs:
             --from-literal=OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      # Deployment 재시작 및 롤아웃 완료 대기
-      - name: Rollout Backend
-        run: |
-          kubectl rollout restart deployment/sk047-myservice-backend -n ${{ env.K8S_NAMESPACE }}
-          kubectl rollout status  deployment/sk047-myservice-backend -n ${{ env.K8S_NAMESPACE }} --timeout=300s
-
-      - name: Rollout Frontend
-        run: |
-          kubectl rollout restart deployment/sk047-myservice-frontend -n ${{ env.K8S_NAMESPACE }}
-          kubectl rollout status  deployment/sk047-myservice-frontend -n ${{ env.K8S_NAMESPACE }} --timeout=300s
-
       - name: Summary
         run: |
           echo "### Deployment complete" >> $GITHUB_STEP_SUMMARY
