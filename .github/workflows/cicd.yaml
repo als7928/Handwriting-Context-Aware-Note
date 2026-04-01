@@ -99,11 +99,8 @@ jobs:
           tags: |
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${{ steps.version.outputs.tag }}
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:latest
-          cache-from: type=gha,scope=backend
-          cache-to: type=gha,mode=max,scope=backend
           provenance: false
 
-      # Frontend 빌드 (push는 main 브랜치에서만)
       - name: Build & Push Frontend
         uses: docker/build-push-action@v6
         env:
@@ -115,8 +112,6 @@ jobs:
           tags: |
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${{ steps.version.outputs.tag }}
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:latest
-          cache-from: type=gha,scope=frontend
-          cache-to: type=gha,mode=max,scope=frontend
           provenance: false
 
       # 이미지 push 성공 후 git 태그 생성 (버전 추적)
