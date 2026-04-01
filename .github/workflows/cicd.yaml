@@ -71,61 +71,27 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Authenticate to Harbor Registry
+      # secrets를 env로 받아야 robot$skala26a-ai2 의 $ 가 셸에서 재확장되지 않음.
+      # /tmp/docker-config 에 깨끗한 config.json 작성 후 DOCKER_CONFIG 로 명시적으로 전달.
+      # buildx(BuildKit)는 DOCKER_CONFIG 를 직접 참조하므로 이 방식이 가장 안정적.
+      - name: Write Harbor auth config
         if: github.ref == 'refs/heads/main'
+        env:
+          HARBOR_USER: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASS: ${{ secrets.HARBOR_PASSWORD }}
         run: |
-          # ── 1. 네트워크 접근 확인 ──────────────────────────────────────────
-          echo ">>> [1/3] Checking Harbor connectivity..."
-          HTTP=$(curl -sk --max-time 10 -o /dev/null -w "%{http_code}" \
-            "https://${{ env.HARBOR_URL }}/api/v2.0/systeminfo")
-          echo "    Harbor /systeminfo → HTTP ${HTTP}"
-          if [ "$HTTP" = "000" ]; then
-            echo "ERROR: Harbor is unreachable from GitHub Actions runner."
-            echo "       Private registry? → Use a self-hosted runner on the same network."
-            exit 1
-          fi
-
-          # ── 2. 자격증명 + push 권한 확인 (Harbor API) ──────────────────────
-          echo ">>> [2/3] Verifying credentials and push permission..."
-
-          # 2-a. 인증 확인 (pull)
-          PULL_HTTP=$(curl -sk --max-time 10 -o /dev/null -w "%{http_code}" \
-            -u "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" \
-            "https://${{ env.HARBOR_URL }}/v2/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}/tags/list")
-          echo "    pull check → HTTP ${PULL_HTTP}"
-          if [ "$PULL_HTTP" = "401" ]; then
-            echo "ERROR: Invalid credentials. Check HARBOR_USERNAME / HARBOR_PASSWORD."
-            exit 1
-          fi
-
-          # 2-b. push 권한 확인 (Harbor API: robot account의 project 권한 조회)
-          PERM_HTTP=$(curl -sk --max-time 10 -o /dev/null -w "%{http_code}" \
-            -u "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" \
-            "https://${{ env.HARBOR_URL }}/api/v2.0/projects/${{ env.HARBOR_PROJECT }}")
-          echo "    project access → HTTP ${PERM_HTTP}"
-          if [ "$PERM_HTTP" = "403" ] || [ "$PERM_HTTP" = "401" ]; then
-            echo "ERROR: Robot account has no access to project '${{ env.HARBOR_PROJECT }}'."
-            echo "       Harbor UI → Projects → ${{ env.HARBOR_PROJECT }} → Robot Accounts"
-            echo "       → Edit robot account → Enable [Push] permission"
-            exit 1
-          fi
-          echo "    Credentials and project access OK"
-
-          # ── 3. config.json 직접 작성 (buildx/BuildKit 인증 - Tekton 방식) ────
-          # docker login은 Docker 데몬이 Bearer token 방식으로 /v2/를 호출해
-          # Harbor와 충돌하므로 사용하지 않음. config.json 직접 작성으로 대체.
-          echo ">>> [3/3] Writing Docker auth config..."
-          AUTH=$(printf '%s:%s' \
-            "${{ secrets.HARBOR_USERNAME }}" \
-            "${{ secrets.HARBOR_PASSWORD }}" | base64 | tr -d '\n')
-          mkdir -p "$HOME/.docker"
+          AUTH=$(printf '%s:%s' "${HARBOR_USER}" "${HARBOR_PASS}" | base64 | tr -d '\n')
+          mkdir -p /tmp/docker-config
           printf '{"auths":{"%s":{"auth":"%s"}}}' \
-            "${{ env.HARBOR_URL }}" "${AUTH}" > "$HOME/.docker/config.json"
-          echo ">>> Done"
+            "${{ env.HARBOR_URL }}" "${AUTH}" > /tmp/docker-config/config.json
+          echo ">>> Auth config written"
+          echo "    username prefix: $(echo ${HARBOR_USER} | cut -c1-10)..."
 
       # Backend 빌드 (push는 main 브랜치에서만)
       - name: Build & Push Backend
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONFIG: /tmp/docker-config
         with:
           context: ./backend
           file: ./backend/Dockerfile-backend
@@ -140,6 +106,8 @@ jobs:
       # Frontend 빌드 (push는 main 브랜치에서만)
       - name: Build & Push Frontend
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_CONFIG: /tmp/docker-config
         with:
           context: ./frontend
           file: ./frontend/Dockerfile-frontend
