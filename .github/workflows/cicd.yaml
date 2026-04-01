@@ -55,13 +55,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to Harbor Registry
+      # docker/login-action 대신 config.json 직접 생성 (Tekton 방식)
+      # buildx(BuildKit)는 Docker 데몬과 별도 컨텍스트로 동작하므로
+      # config.json을 직접 작성해야 Harbor 인증이 안정적으로 전달됨
+      - name: Authenticate to Harbor Registry
         if: github.ref == 'refs/heads/main'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.HARBOR_URL }}
-          username: ${{ secrets.HARBOR_USERNAME }}
-          password: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          AUTH=$(printf '%s:%s' "${{ secrets.HARBOR_USERNAME }}" "${{ secrets.HARBOR_PASSWORD }}" | base64 | tr -d '\n')
+          mkdir -p "$HOME/.docker"
+          printf '{"auths":{"%s":{"auth":"%s"}}}' "${{ env.HARBOR_URL }}" "${AUTH}" \
+            > "$HOME/.docker/config.json"
+          echo ">>> Harbor auth config written"
 
       # Backend 빌드 (push는 main 브랜치에서만)
       - name: Build & Push Backend
@@ -75,6 +79,7 @@ jobs:
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:latest
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
+          provenance: false
 
       # Frontend 빌드 (push는 main 브랜치에서만)
       - name: Build & Push Frontend
@@ -88,6 +93,7 @@ jobs:
             ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:latest
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
+          provenance: false
 
       - name: Summary
         if: github.ref == 'refs/heads/main'
