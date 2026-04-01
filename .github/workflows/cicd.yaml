@@ -1,0 +1,182 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HARBOR_URL: amdp-registry.skala-ai.com
+  HARBOR_PROJECT: skala25a
+  BACKEND_IMAGE: sk047-myservice-backend
+  FRONTEND_IMAGE: sk047-myservice-frontend
+  K8S_NAMESPACE: class-2
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Required GitHub Secrets (Settings → Secrets and variables → Actions):
+#
+#   HARBOR_USERNAME   - Harbor robot account username
+#   HARBOR_PASSWORD   - Harbor robot account password
+#   KUBE_CONFIG       - base64-encoded kubeconfig  (cat ~/.kube/config | base64)
+#   POSTGRES_DB       - PostgreSQL database name
+#   POSTGRES_USER     - PostgreSQL username
+#   POSTGRES_PASSWORD - PostgreSQL password
+#   POSTGRES_HOST     - PostgreSQL host (e.g. postgres-1-postgresql.postgres)
+#   POSTGRES_PORT     - PostgreSQL port (e.g. 5432)
+#   DATABASE_URL      - Full asyncpg URL
+#   OPENAI_API_KEY    - OpenAI API key
+# ─────────────────────────────────────────────────────────────────────────────
+
+jobs:
+  # ──────────────────────────────────────────────
+  # Job 1: Docker 이미지 빌드 & Harbor Push
+  # ──────────────────────────────────────────────
+  build-push:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.set-tag.outputs.tag }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set image tag (short SHA)
+        id: set-tag
+        run: echo "tag=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Harbor Registry
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.HARBOR_URL }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      # Backend 빌드 (push는 main 브랜치에서만)
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile-backend
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: |
+            ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${{ steps.set-tag.outputs.tag }}
+            ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:latest
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,mode=max,scope=backend
+
+      # Frontend 빌드 (push는 main 브랜치에서만)
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile-frontend
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: |
+            ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${{ steps.set-tag.outputs.tag }}
+            ${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:latest
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,mode=max,scope=frontend
+
+      - name: Summary
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "### Images pushed to Harbor" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${{ steps.set-tag.outputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${{ steps.set-tag.outputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+
+  # ──────────────────────────────────────────────
+  # Job 2: Kubernetes 배포 (main 브랜치 push 시만 실행)
+  # ──────────────────────────────────────────────
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: build-push
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Verify cluster connection
+        run: kubectl cluster-info
+
+      - name: Install Kustomize
+        run: |
+          curl -sLo kustomize.tar.gz \
+            "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
+          tar -xzf kustomize.tar.gz
+          sudo mv kustomize /usr/local/bin/kustomize
+
+      # kustomization.yaml의 images 필드를 업데이트하여 새 태그 적용
+      - name: Update image tags via Kustomize
+        run: |
+          cd k8s
+          kustomize edit set image \
+            "${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${{ needs.build-push.outputs.image-tag }}" \
+            "${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${{ needs.build-push.outputs.image-tag }}"
+          echo ">>> kustomization.yaml after image update:"
+          cat kustomization.yaml
+
+      # ConfigMap, PVC, Deployment, Service, Ingress 적용 (Secret 제외)
+      - name: Apply K8s manifests
+        run: |
+          kubectl apply -f k8s/01-configmaps.yaml -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/03-pvcs.yaml       -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/11-qdrant.yaml     -n ${{ env.K8S_NAMESPACE }}
+          kustomize build k8s | kubectl apply -f - -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/20-ingress.yaml    -n ${{ env.K8S_NAMESPACE }}
+
+      # Secret은 GitHub Secrets에서 직접 생성/업데이트 (02-secret.yaml 대체)
+      - name: Create / Update K8s Secret
+        run: |
+          kubectl create secret generic sk047-myservice-secret \
+            --namespace=${{ env.K8S_NAMESPACE }} \
+            --from-literal=POSTGRES_DB="${{ secrets.POSTGRES_DB }}" \
+            --from-literal=POSTGRES_USER="${{ secrets.POSTGRES_USER }}" \
+            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
+            --from-literal=POSTGRES_HOST="${{ secrets.POSTGRES_HOST }}" \
+            --from-literal=POSTGRES_PORT="${{ secrets.POSTGRES_PORT }}" \
+            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --from-literal=OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      # Deployment 재시작 및 롤아웃 완료 대기
+      - name: Rollout Backend
+        run: |
+          kubectl rollout restart deployment/sk047-myservice-backend -n ${{ env.K8S_NAMESPACE }}
+          kubectl rollout status  deployment/sk047-myservice-backend -n ${{ env.K8S_NAMESPACE }} --timeout=300s
+
+      - name: Rollout Frontend
+        run: |
+          kubectl rollout restart deployment/sk047-myservice-frontend -n ${{ env.K8S_NAMESPACE }}
+          kubectl rollout status  deployment/sk047-myservice-frontend -n ${{ env.K8S_NAMESPACE }} --timeout=300s
+
+      - name: Summary
+        run: |
+          echo "### Deployment complete" >> $GITHUB_STEP_SUMMARY
+          echo "**Namespace:** \`${{ env.K8S_NAMESPACE }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Image tag:** \`${{ needs.build-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }} --no-headers | grep sk047 >> $GITHUB_STEP_SUMMARY || true
