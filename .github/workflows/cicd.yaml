@@ -18,6 +18,7 @@ env:
   BACKEND_IMAGE: sk047-myservice-backend
   FRONTEND_IMAGE: sk047-myservice-frontend
   K8S_NAMESPACE: class-2
+  AWS_REGION: ap-northeast-2
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Required GitHub Secrets (Settings → Secrets and variables → Actions):
@@ -154,12 +155,12 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Configure kubeconfig via EKS
         run: |
           aws eks update-kubeconfig \
-            --region ${{ secrets.AWS_REGION }} \
+            --region ${{ env.AWS_REGION }} \
             --name ${{ secrets.EKS_CLUSTER_NAME }}
 
 
