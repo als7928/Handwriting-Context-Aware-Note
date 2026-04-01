@@ -1,9 +1,14 @@
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: sk047-build-push-run
+  name: sk047-pipelinerun
   namespace: class-2
 spec:
+  taskRunTemplate:
+    podTemplate:
+      securityContext:
+        fsGroup: 65532        # git-clone 태스크 실행 uid와 동일 → PVC 쓰기 권한 부여
+        runAsNonRoot: true
   pipelineRef:
     name: sk047-build-push-pipeline
   params:
