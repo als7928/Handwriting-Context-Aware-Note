@@ -103,14 +103,10 @@ jobs:
           fi
           echo "    Credentials OK (HTTP ${AUTH_HTTP})"
 
-          # ── 3. Docker 인증 설정 ─────────────────────────────────────────────
+          # ── 3. config.json 직접 작성 (buildx/BuildKit 인증 - Tekton 방식) ────
+          # docker login은 Docker 데몬이 Bearer token 방식으로 /v2/를 호출해
+          # Harbor와 충돌하므로 사용하지 않음. config.json 직접 작성으로 대체.
           echo ">>> [3/3] Writing Docker auth config..."
-          # docker login (Docker 데몬 credentials 등록)
-          echo "${{ secrets.HARBOR_PASSWORD }}" | \
-            docker login "${{ env.HARBOR_URL }}" \
-              -u "${{ secrets.HARBOR_USERNAME }}" --password-stdin
-
-          # config.json 직접 작성 (buildx/BuildKit 인증 보장 - Tekton 방식)
           AUTH=$(printf '%s:%s' \
             "${{ secrets.HARBOR_USERNAME }}" \
             "${{ secrets.HARBOR_PASSWORD }}" | base64 | tr -d '\n')
