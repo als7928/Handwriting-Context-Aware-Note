@@ -200,15 +200,10 @@ jobs:
             argocd.argoproj.io/sync-options=Prune=false \
             --overwrite
 
-      # ConfigMap, PVC, Deployment, Service, Ingress 적용
+      # ConfigMap, PVC, Deployment, Service, Ingress 적용 (kustomize 사용)
       - name: Apply K8s manifests
         run: |
-          kubectl apply -f k8s/01-configmaps.yaml -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/03-pvcs.yaml       -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/11-qdrant.yaml     -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/12-backend.yaml    -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/13-frontend.yaml   -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/20-ingress.yaml    -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -k k8s/ -n ${{ env.K8S_NAMESPACE }}
 
       - name: Summary
         run: |
