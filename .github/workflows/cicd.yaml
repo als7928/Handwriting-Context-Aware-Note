@@ -164,22 +164,14 @@ jobs:
             --name ${{ secrets.EKS_CLUSTER_NAME }}
 
 
-      - name: Install Kustomize
+      # sed로 이미지 태그 직접 교체
+      - name: Update image tags
         run: |
-          curl -sLo kustomize.tar.gz \
-            "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz"
-          tar -xzf kustomize.tar.gz
-          sudo mv kustomize /usr/local/bin/kustomize
-
-      # kustomization.yaml의 images 필드를 업데이트하여 새 태그 적용
-      - name: Update image tags via Kustomize
-        run: |
-          cd k8s
-          kustomize edit set image \
-            "${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${{ needs.build-push.outputs.image-tag }}" \
-            "${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${{ needs.build-push.outputs.image-tag }}"
-          echo ">>> kustomization.yaml after image update:"
-          cat kustomization.yaml
+          TAG=${{ needs.build-push.outputs.image-tag }}
+          sed -i "s|${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:[^ ]*|${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}:${TAG}|g" k8s/12-backend.yaml
+          sed -i "s|${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:[^ ]*|${{ env.HARBOR_URL }}/${{ env.HARBOR_PROJECT }}/${{ env.FRONTEND_IMAGE }}:${TAG}|g" k8s/13-frontend.yaml
+          echo ">>> Backend image:" && grep "image:" k8s/12-backend.yaml
+          echo ">>> Frontend image:" && grep "image:" k8s/13-frontend.yaml
 
       # ConfigMap, PVC, Deployment, Service, Ingress 적용 (Secret 제외)
       - name: Apply K8s manifests
@@ -187,7 +179,8 @@ jobs:
           kubectl apply -f k8s/01-configmaps.yaml -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/03-pvcs.yaml       -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/11-qdrant.yaml     -n ${{ env.K8S_NAMESPACE }}
-          kustomize build k8s | kubectl apply -f - -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/12-backend.yaml    -n ${{ env.K8S_NAMESPACE }}
+          kubectl apply -f k8s/13-frontend.yaml   -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/20-ingress.yaml    -n ${{ env.K8S_NAMESPACE }}
 
       # Secret은 GitHub Secrets에서 직접 생성/업데이트 (02-secret.yaml 대체)
