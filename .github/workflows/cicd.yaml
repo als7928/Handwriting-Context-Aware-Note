@@ -181,14 +181,28 @@ jobs:
           echo ">>> kustomization.yaml after image update:"
           cat kustomization.yaml
 
+      # ConfigMap, PVC, Deployment, Service, Ingress 적용 (Secret 제외)
       - name: Apply K8s manifests
         run: |
           kubectl apply -f k8s/01-configmaps.yaml -n ${{ env.K8S_NAMESPACE }}
-          kubectl apply -f k8s/02-secret.yaml     -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/03-pvcs.yaml       -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/11-qdrant.yaml     -n ${{ env.K8S_NAMESPACE }}
           kustomize build k8s | kubectl apply -f - -n ${{ env.K8S_NAMESPACE }}
           kubectl apply -f k8s/20-ingress.yaml    -n ${{ env.K8S_NAMESPACE }}
+
+      # Secret은 GitHub Secrets에서 직접 생성/업데이트 (02-secret.yaml 대체)
+      - name: Create / Update K8s Secret
+        run: |
+          kubectl create secret generic sk047-myservice-secret \
+            --namespace=${{ env.K8S_NAMESPACE }} \
+            --from-literal=POSTGRES_DB="${{ secrets.POSTGRES_DB }}" \
+            --from-literal=POSTGRES_USER="${{ secrets.POSTGRES_USER }}" \
+            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
+            --from-literal=POSTGRES_HOST="${{ secrets.POSTGRES_HOST }}" \
+            --from-literal=POSTGRES_PORT="${{ secrets.POSTGRES_PORT }}" \
+            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+            --from-literal=OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Summary
         run: |
