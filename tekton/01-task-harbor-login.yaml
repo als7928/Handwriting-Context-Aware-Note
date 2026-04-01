@@ -5,7 +5,7 @@ metadata:
   namespace: class-2
 spec:
   params:
-    - name: harbor-url
+    - name: harbor-url 
       type: string
       default: amdp-registry.skala-ai.com
   workspaces:
