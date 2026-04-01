@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: sk047-build-push-run
+  namespace: class-2
+spec:
+  pipelineRef:
+    name: sk047-build-push-pipeline
+  params:
+    - name: git-url
+      value: "https://github.com/als7928/Handwriting-Context-Aware-Note.git"
+    - name: git-revision
+      value: main
+    - name: harbor-url
+      value: amdp-registry.skala-ai.com
+    - name: harbor-project
+      value: skala26a-ai2
+    - name: backend-image
+      value: sk047-myservice-backend
+    - name: backend-ver
+      value: "1.0.4"
+    - name: frontend-image
+      value: sk047-myservice-frontend
+    - name: frontend-ver
+      value: "1.0.1"
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi
+    - name: docker-config
+      emptyDir: {}

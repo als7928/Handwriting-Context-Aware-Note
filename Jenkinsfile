@@ -2,7 +2,6 @@ pipeline {
     agent { label 'docker' } 
 
     tools {
-        // 기존에 작동 확인된 도구 설정 유지
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'jenkins-docker'
     }
 
@@ -10,8 +9,6 @@ pipeline {
         HARBOR_URL = 'amdp-registry.skala-ai.com'
         HARBOR_PROJECT = 'skala26a-ai2'
         
-        // Jenkins Credentials에 등록된 ID가 'harbor-robot-account'인지 확인하세요.
-        // credentials() 함수를 사용하면 _USR, _PSW 변수가 자동으로 생성됩니다.
         HARBOR_CREDS = credentials('harbor-robot-account') 
         
         BACKEND_IMAGE = 'sk047-myservice-backend'
@@ -47,8 +44,6 @@ pipeline {
                     def dockerHome = tool name: 'jenkins-docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
                     
                     withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {
-                        // 1. Docker Login (가장 확실한 stdin 방식 사용)
-                        // echo 뒤의 변수는 credentials()에 의해 생성된 _PSW, _USR 입니다.
                         sh "echo ${HARBOR_CREDS_PSW} | docker login ${HARBOR_URL} -u '${HARBOR_CREDS_USR}' --password-stdin"
                         
                         // 2. Push Images
@@ -69,7 +64,6 @@ pipeline {
     post {
         always {
             script {
-                // 빌드 후 로컬 이미지 정리 (성공/실패 상관없이 실행)
                 try {
                     def dockerHome = tool name: 'jenkins-docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
                     withEnv(["PATH+DOCKER=${dockerHome}/bin"]) {

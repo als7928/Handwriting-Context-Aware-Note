@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: sk047-harbor-login
+  namespace: class-2
+spec:
+  params:
+    - name: harbor-url
+      type: string
+      default: amdp-registry.skala-ai.com
+  workspaces:
+    - name: docker-config
+      description: "Workspace to store Docker config.json for kaniko"
+  steps:
+    - name: login
+      image: alpine:3.20
+      env:
+        - name: HARBOR_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: harbor-robot-account
+              key: username
+        - name: HARBOR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: harbor-robot-account
+              key: password
+      script: |
+        #!/bin/sh
+        set -e
+
+        echo ">>> Creating Harbor Docker config..."
+        AUTH=$(echo -n "${HARBOR_USERNAME}:${HARBOR_PASSWORD}" | base64 | tr -d '\n')
+
+        mkdir -p $(workspaces.docker-config.path)
+        printf '{"auths":{"%s":{"auth":"%s"}}}' "$(params.harbor-url)" "${AUTH}" \
+          > $(workspaces.docker-config.path)/config.json
+
+        echo ">>> Harbor login config created"

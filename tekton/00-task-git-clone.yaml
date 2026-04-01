@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: git-clone
+  namespace: class-2
+spec:
+  params:
+    - name: url
+      type: string
+      description: "Git repository URL"
+    - name: revision
+      type: string
+      default: main
+      description: "Git branch, tag, or commit SHA"
+    - name: deleteExisting
+      type: string
+      default: "true"
+  workspaces:
+    - name: output
+  steps:
+    - name: clone
+      image: alpine/git:latest
+      script: |
+        #!/bin/sh
+        set -e
+
+        if [ "$(params.deleteExisting)" = "true" ]; then
+          rm -rf $(workspaces.output.path)/*
+        fi
+
+        git clone $(params.url) $(workspaces.output.path)
+        cd $(workspaces.output.path)
+        git checkout $(params.revision)
+
+        echo ">>> Cloned $(params.url) @ $(params.revision)"

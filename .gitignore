@@ -58,4 +58,9 @@ dist/
 .env
 uploads/
 
+# Secrets (실제 값 포함 파일 - 절대 커밋 금지)
 k8s/02-secret.yaml
+k8s/02-secret*.yaml
+!k8s/02-secret.example.yaml
+tekton/*secret*.yaml
+!tekton/*secret*.example.yaml

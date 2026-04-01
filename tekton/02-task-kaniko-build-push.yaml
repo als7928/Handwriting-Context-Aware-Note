@@ -1,0 +1,32 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: sk047-kaniko-build-push
+  namespace: class-2
+spec:
+  params:
+    - name: image
+      type: string
+      description: "Full image name with tag (e.g., 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/sk047-myservice-backend:1.0.4)"
+    - name: dockerfile
+      type: string
+      description: "Path to Dockerfile relative to source workspace root"
+    - name: context
+      type: string
+      description: "Build context directory relative to source workspace root"
+  workspaces:
+    - name: source
+      description: "Workspace containing cloned source code"
+    - name: docker-config
+      description: "Workspace containing Docker config.json from ECR login"
+  steps:
+    - name: build-push
+      image: gcr.io/kaniko-project/executor:latest
+      env:
+        - name: DOCKER_CONFIG
+          value: $(workspaces.docker-config.path)
+      args:
+        - --dockerfile=$(workspaces.source.path)/$(params.dockerfile)
+        - --context=dir://$(workspaces.source.path)/$(params.context)
+        - --destination=$(params.image)
+        - --verbosity=info
