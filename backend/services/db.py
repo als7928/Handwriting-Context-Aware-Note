@@ -18,34 +18,46 @@ async def ensure_database_exists() -> None:
     Connects to the default ``postgres`` maintenance database using the same
     credentials as the application, then issues a ``CREATE DATABASE`` statement
     when the target database is absent.
+
+    In managed/shared PostgreSQL environments (e.g. k8s) the application user
+    typically lacks access to the maintenance database or CREATEDB privilege.
+    In that case a warning is logged and startup continues, assuming the
+    database was pre-provisioned by the cluster operator.
     """
     parsed = urlparse(settings.database_url)
-    db_name = parsed.path.lstrip("/")            # e.g. "spatial_notes"
+    db_name = parsed.path.lstrip("/")            # e.g. "cloud"
     user = parsed.username
     password = parsed.password
     host = parsed.hostname
     port = parsed.port or 5432
 
-    # Connect to the maintenance database instead of the target one
-    conn = await asyncpg.connect(
-        host=host,
-        port=port,
-        user=user,
-        password=password,
-        database="postgres",
-    )
     try:
-        exists = await conn.fetchval(
-            "SELECT 1 FROM pg_database WHERE datname = $1", db_name
+        conn = await asyncpg.connect(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            database="postgres",
         )
-        if not exists:
-            # CREATE DATABASE cannot run inside a transaction block
-            await conn.execute(f'CREATE DATABASE "{db_name}"')
-            logger.info("Database '%s' created successfully.", db_name)
-        else:
-            logger.debug("Database '%s' already exists.", db_name)
-    finally:
-        await conn.close()
+        try:
+            exists = await conn.fetchval(
+                "SELECT 1 FROM pg_database WHERE datname = $1", db_name
+            )
+            if not exists:
+                # CREATE DATABASE cannot run inside a transaction block
+                await conn.execute(f'CREATE DATABASE "{db_name}"')
+                logger.info("Database '%s' created successfully.", db_name)
+            else:
+                logger.debug("Database '%s' already exists.", db_name)
+        finally:
+            await conn.close()
+    except Exception as exc:
+        logger.warning(
+            "Could not verify/create database '%s' via maintenance DB "
+            "(user '%s' may lack CREATEDB privilege or access to 'postgres' DB). "
+            "Assuming database already exists. Error: %s",
+            db_name, user, exc,
+        )
 
 
 engine = create_async_engine(settings.database_url, echo=False)

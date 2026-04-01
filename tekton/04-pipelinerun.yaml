@@ -8,7 +8,6 @@ spec:
     podTemplate:
       securityContext:
         fsGroup: 65532        # git-clone 태스크 실행 uid와 동일 → PVC 쓰기 권한 부여
-        runAsNonRoot: true
   pipelineRef:
     name: sk047-build-push-pipeline
   params:
@@ -38,4 +37,4 @@ spec:
             requests:
               storage: 2Gi
     - name: docker-config
-      emptyDir: {}
+      emptyDir: {}        # 각 TaskRun마다 독립적인 emptyDir 생성됨

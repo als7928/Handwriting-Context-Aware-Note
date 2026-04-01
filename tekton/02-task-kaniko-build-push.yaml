@@ -7,19 +7,44 @@ spec:
   params:
     - name: image
       type: string
-      description: "Full image name with tag (e.g., 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/sk047-myservice-backend:1.0.4)"
+      description: "Full image name with tag"
     - name: dockerfile
       type: string
       description: "Path to Dockerfile relative to source workspace root"
     - name: context
       type: string
       description: "Build context directory relative to source workspace root"
+    - name: harbor-url
+      type: string
+      default: amdp-registry.skala-ai.com
   workspaces:
     - name: source
       description: "Workspace containing cloned source code"
     - name: docker-config
-      description: "Workspace containing Docker config.json from ECR login"
+      description: "emptyDir shared between steps in this pod"
   steps:
+    - name: harbor-login
+      image: alpine:3.20
+      env:
+        - name: HARBOR_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: harbor-robot-account
+              key: username
+        - name: HARBOR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: harbor-robot-account
+              key: password
+      script: |
+        #!/bin/sh
+        set -e
+        AUTH=$(echo -n "${HARBOR_USERNAME}:${HARBOR_PASSWORD}" | base64 | tr -d '\n')
+        mkdir -p $(workspaces.docker-config.path)
+        printf '{"auths":{"%s":{"auth":"%s"}}}' "$(params.harbor-url)" "${AUTH}" \
+          > $(workspaces.docker-config.path)/config.json
+        echo ">>> Harbor login config created"
+
     - name: build-push
       image: gcr.io/kaniko-project/executor:latest
       env:

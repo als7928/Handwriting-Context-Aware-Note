@@ -50,25 +50,12 @@ spec:
         - name: deleteExisting
           value: "true"
 
-    # Stage 2: Harbor Login
-    - name: harbor-login
-      taskRef:
-        name: sk047-harbor-login
-      runAfter:
-        - checkout
-      params:
-        - name: harbor-url
-          value: $(params.harbor-url)
-      workspaces:
-        - name: docker-config
-          workspace: docker-config
-
-    # Stage 3: Build & Push Backend
+    # Stage 2: Build & Push Backend (harbor-login 포함)
     - name: build-push-backend
       taskRef:
         name: sk047-kaniko-build-push
       runAfter:
-        - harbor-login
+        - checkout
       params:
         - name: image
           value: $(params.harbor-url)/$(params.harbor-project)/$(params.backend-image):$(params.backend-ver)
@@ -76,18 +63,20 @@ spec:
           value: backend/Dockerfile-backend
         - name: context
           value: backend
+        - name: harbor-url
+          value: $(params.harbor-url)
       workspaces:
         - name: source
           workspace: shared-workspace
         - name: docker-config
           workspace: docker-config
 
-    # Stage 3: Build & Push Frontend (병렬 실행)
+    # Stage 2: Build & Push Frontend (harbor-login 포함, 병렬 실행)
     - name: build-push-frontend
       taskRef:
         name: sk047-kaniko-build-push
       runAfter:
-        - harbor-login
+        - checkout
       params:
         - name: image
           value: $(params.harbor-url)/$(params.harbor-project)/$(params.frontend-image):$(params.frontend-ver)
@@ -95,6 +84,8 @@ spec:
           value: frontend/Dockerfile-frontend
         - name: context
           value: frontend
+        - name: harbor-url
+          value: $(params.harbor-url)
       workspaces:
         - name: source
           workspace: shared-workspace
