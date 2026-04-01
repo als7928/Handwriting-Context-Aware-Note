@@ -85,16 +85,23 @@ jobs:
             exit 1
           fi
 
-          # ── 2. 자격증명 확인 (Harbor API) ──────────────────────────────────
-          echo ">>> [2/3] Verifying credentials via Harbor API..."
+          # ── 2. 자격증명 확인 (Docker Registry v2 API - robot account 호환) ────
+          echo ">>> [2/3] Verifying credentials via Docker Registry v2 API..."
           AUTH_HTTP=$(curl -sk --max-time 10 -o /dev/null -w "%{http_code}" \
             -u "${{ secrets.HARBOR_USERNAME }}:${{ secrets.HARBOR_PASSWORD }}" \
-            "https://${{ env.HARBOR_URL }}/api/v2.0/users/current")
-          echo "    /users/current → HTTP ${AUTH_HTTP}"
+            "https://${{ env.HARBOR_URL }}/v2/${{ env.HARBOR_PROJECT }}/${{ env.BACKEND_IMAGE }}/tags/list")
+          echo "    /v2/.../tags/list → HTTP ${AUTH_HTTP}"
+          # 200: 이미지 존재, 404: 이미지 없음(첫 push), 둘 다 인증 성공
+          # 401: credentials 오류, 403: 권한 없음
           if [ "$AUTH_HTTP" = "401" ]; then
             echo "ERROR: Invalid credentials (401). Check HARBOR_USERNAME / HARBOR_PASSWORD secrets."
             exit 1
           fi
+          if [ "$AUTH_HTTP" = "403" ]; then
+            echo "ERROR: Forbidden (403). Robot account has no push permission on ${{ env.HARBOR_PROJECT }}."
+            exit 1
+          fi
+          echo "    Credentials OK (HTTP ${AUTH_HTTP})"
 
           # ── 3. Docker 인증 설정 ─────────────────────────────────────────────
           echo ">>> [3/3] Writing Docker auth config..."
