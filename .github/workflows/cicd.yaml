@@ -192,16 +192,24 @@ jobs:
 
       # Secret은 GitHub Secrets에서 직접 생성/업데이트 (02-secret.yaml 대체)
       - name: Create / Update K8s Secret
+        env:
+          SECRET_POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          SECRET_POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          SECRET_POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          SECRET_POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          SECRET_POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          SECRET_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SECRET_OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           kubectl create secret generic sk047-myservice-secret \
             --namespace=${{ env.K8S_NAMESPACE }} \
-            --from-literal=POSTGRES_DB="${{ secrets.POSTGRES_DB }}" \
-            --from-literal=POSTGRES_USER="${{ secrets.POSTGRES_USER }}" \
-            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
-            --from-literal=POSTGRES_HOST="${{ secrets.POSTGRES_HOST }}" \
-            --from-literal=POSTGRES_PORT="${{ secrets.POSTGRES_PORT }}" \
-            --from-literal=DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-            --from-literal=OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+            --from-literal=POSTGRES_DB="${SECRET_POSTGRES_DB}" \
+            --from-literal=POSTGRES_USER="${SECRET_POSTGRES_USER}" \
+            --from-literal=POSTGRES_PASSWORD="${SECRET_POSTGRES_PASSWORD}" \
+            --from-literal=POSTGRES_HOST="${SECRET_POSTGRES_HOST}" \
+            --from-literal=POSTGRES_PORT="${SECRET_POSTGRES_PORT}" \
+            --from-literal=DATABASE_URL="${SECRET_DATABASE_URL}" \
+            --from-literal=OPENAI_API_KEY="${SECRET_OPENAI_API_KEY}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Summary
